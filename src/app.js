@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 
+const authRoutes = require('./routes/auth');
+
 dotenv.config();
 
 const app = express();
@@ -15,6 +17,8 @@ app.use(cors());
 app.use(helmet());
 app.use(compression());
 app.use(morgan('dev'));
+
+app.use('/api/auth', authRoutes);
 
 // Routes placeholder
 app.get('/', (req, res) => {
