@@ -27,4 +27,16 @@ model User {
   password  String
   role      Role     @default(EMPLOYEE)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  departmentId Int?
+  department   Department? @relation(fields: [departmentId], references: [id])
+}
+
+model Department {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  employees User[] // relation with users
 }
