@@ -1,43 +1,29 @@
-const prisma = require("../config/prismaClient");
+import { prisma } from "../prismaClient.js";
 
-// ✅ Create Department (Admin only)
-const createDepartment = async (req, res) => {
+// Create Department
+export const createDepartment = async (req, res) => {
   try {
-    const { name } = req.body;
-
-    // validation
-    if (!name) {
-      return res.status(400).json({ error: "Department name is required" });
-    }
-
+    const { name, userId } = req.body;
     const department = await prisma.department.create({
-      data: { name },
+      data: {
+        name,
+        createdBy: { connect: { id: userId } }
+      }
     });
-
-    res.status(201).json({
-      message: "Department created successfully",
-      department,
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(201).json(department);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
-// ✅ Get all Departments
-const getDepartments = async (req, res) => {
+// Get All Departments
+export const getDepartments = async (req, res) => {
   try {
     const departments = await prisma.department.findMany({
-      include: {
-        employees: {
-          select: { id: true, name: true, email: true, role: true },
-        },
-      },
+      include: { createdBy: true, projects: true }
     });
-
     res.json(departments);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
-
-module.exports = { createDepartment, getDepartments };

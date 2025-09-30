@@ -1,42 +1,61 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  MANAGER
-  EMPLOYEE
-  CLIENT
+generator client {
+  provider = "prisma-client-js"
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   name      String
   email     String   @unique
   password  String
-  role      Role     @default(EMPLOYEE)
+  role      UserRole @default(EMPLOYEE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  departmentId Int?
-  department   Department? @relation(fields: [departmentId], references: [id])
+  departments Department[] @relation("UserDepartments")
+  projects    Project[]    @relation("UserProjects")
 }
 
 model Department {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
+  id        String   @id @default(uuid())
+  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  employees User[] // relation with users
+
+  createdBy   User   @relation("UserDepartments", fields: [createdById], references: [id])
+  createdById String
+
+  projects Project[] @relation("DepartmentProjects")
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  name        String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  status      ProjectStatus @default(PLANNED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  departments Department[] @relation("DepartmentProjects")
+  createdBy   User         @relation("UserProjects", fields: [createdById], references: [id])
+  createdById String
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  EMPLOYEE
+}
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  ON_HOLD
 }
