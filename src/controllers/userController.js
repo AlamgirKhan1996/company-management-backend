@@ -1,24 +1,27 @@
-import { prisma } from "../prismaClient.js";
+import { prisma } from "../utils/prismaClient.js";
 
 // Create User
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
-    const user = await prisma.user.create({
-      data: { name, email, password, role }
+    const user = await userService.createUser({
+      name,
+      email,
+      password,
+      role
     });
     res.status(201).json(user);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
 // Get All Users
-export const getUsers = async (req, res) => {
+export const getUsers = async (req, res, next) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await userService.getAllUsers();
     res.json(users);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };

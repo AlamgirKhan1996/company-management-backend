@@ -16,8 +16,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  departments Department[] @relation("UserDepartments")
-  projects    Project[]    @relation("UserProjects")
+  departments  Department[]  @relation("UserDepartments")
+  projects     Project[]     @relation("UserProjects")
+  tasks        Task[]        @relation("UserTasks")
+  activityLogs ActivityLog[]
 }
 
 model Department {
@@ -45,6 +47,42 @@ model Project {
   departments Department[] @relation("DepartmentProjects")
   createdBy   User         @relation("UserProjects", fields: [createdById], references: [id])
   createdById String
+
+  tasks        Task[]
+  activityLogs ActivityLog[]
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  dueDate     DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
+
+  assignedTo   User?         @relation("UserTasks", fields: [assignedToId], references: [id])
+  assignedToId String?
+  activityLogs ActivityLog[]
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  action    String
+  meta      String?
+  createdAt DateTime @default(now())
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
+
+  task   Task?   @relation(fields: [taskId], references: [id])
+  taskId String?
 }
 
 enum UserRole {
@@ -58,4 +96,10 @@ enum ProjectStatus {
   IN_PROGRESS
   COMPLETED
   ON_HOLD
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
 }
