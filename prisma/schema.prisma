@@ -20,6 +20,9 @@ model User {
   projects     Project[]     @relation("UserProjects")
   tasks        Task[]        @relation("UserTasks")
   activityLogs ActivityLog[]
+  employeeOf   Department[]  @relation("DepartmentEmployees") // departments where user is employee
+
+  @@index([email])
 }
 
 model Department {
@@ -32,6 +35,8 @@ model Department {
   createdById String
 
   projects Project[] @relation("DepartmentProjects")
+
+  employees User[] @relation("DepartmentEmployees") // users who are employees of this department
 }
 
 model Project {
@@ -67,13 +72,18 @@ model Task {
   assignedTo   User?         @relation("UserTasks", fields: [assignedToId], references: [id])
   assignedToId String?
   activityLogs ActivityLog[]
+
+  @@index([status])
+  @@index([dueDate])
 }
 
 model ActivityLog {
-  id        String   @id @default(uuid())
-  action    String
-  meta      String?
-  createdAt DateTime @default(now())
+  id         String   @id @default(uuid())
+  action     String
+  meta       String?
+  entityType String? // e.g. PROJECT, TASK, USER
+  entityId   String? // related entity ID
+  createdAt  DateTime @default(now())
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
