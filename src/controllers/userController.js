@@ -1,4 +1,4 @@
-import { prisma } from "../utils/prismaClient.js";
+import * as userService from "../services/userService.js";
 
 // Create User
 export const createUser = async (req, res, next) => {

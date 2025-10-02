@@ -1,6 +1,6 @@
 import {
   createTask,
-  getTasks,
+  getAllTasks,
   getTaskById,
   updateTask,
   deleteTask,
@@ -17,7 +17,7 @@ export const createTaskController = async (req, res) => {
 
 export const getTasksController = async (req, res) => {
   try {
-    const tasks = await getTasks();
+    const tasks = await getAllTasks();
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ error: error.message });

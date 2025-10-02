@@ -1,6 +1,6 @@
 import {
   createEmployee,
-  getEmployees,
+  getAllEmployees,
   getEmployeeById,
   updateEmployee,
   deleteEmployee,
@@ -17,7 +17,7 @@ export const createEmployeeController = async (req, res) => {
 
 export const getEmployeesController = async (req, res) => {
   try {
-    const employees = await getEmployees();
+    const employees = await getAllEmployees();
     res.json(employees);
   } catch (error) {
     res.status(500).json({ error: error.message });
