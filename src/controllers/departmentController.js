@@ -1,7 +1,7 @@
 import * as departmentService from "../services/departmentService.js";
 
 // Create Department
-export const createDepartment = async (req, res) => {
+export const createDepartment = async (req, res, next) => {
   try {
     const { name, userId } = req.body;
     const department = await departmentService.createDepartment({
@@ -10,7 +10,7 @@ export const createDepartment = async (req, res) => {
     });
     res.status(201).json(department);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 

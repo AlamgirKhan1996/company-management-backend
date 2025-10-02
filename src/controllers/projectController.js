@@ -1,36 +1,32 @@
-import { prisma } from "../prismaClient.js";
+import * as projectsService from "../services/projectService.js";
 
 // Create Project
-export const createProject = async (req, res) => {
+export const createProject = async (req, res, next) => {
   try {
     const { name, description, startDate, endDate, status, departmentIds, userId } = req.body;
 
-    const project = await prisma.project.create({
-      data: {
-        name,
-        description,
-        startDate: new Date(startDate),
-        endDate: endDate ? new Date(endDate) : null,
-        status,
-        createdBy: { connect: { id: userId } },
-        departments: { connect: departmentIds.map(id => ({ id })) },
-      },
+    const project = await projectsService.createProject({
+      name,
+      description,
+      startDate: new Date(startDate),
+      endDate: endDate ? new Date(endDate) : null,
+      status,
+      createdBy: { connect: { id: userId } },
+      departments: { connect: departmentIds.map(id => ({ id })) },
     });
 
     res.status(201).json(project);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
 // Get all projects
-export const getProjects = async (req, res) => {
+export const getProjects = async (req, res, next) => {
   try {
-    const projects = await prisma.project.findMany({
-      include: { departments: true, createdBy: true },
-    });
+    const projects = await projectsService.getAllProjects();
     res.json(projects);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
