@@ -19,7 +19,7 @@ export const createDepartment = async (name, createdById) => {
   return await prisma.department.create({
     data: {
       name,
-      createdById, // just assign the user id directly
+      createdBy: { connect: { id: createdById } },
     },
     include: {
       createdBy: {
