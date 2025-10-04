@@ -5,8 +5,11 @@ import projectRoutes from "./routes/projectRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import dotenv from "dotenv";
+
 
 const app = express();
+dotenv.config();
 app.use(express.json());
 
 // Root
