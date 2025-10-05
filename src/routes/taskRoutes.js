@@ -6,10 +6,13 @@ import {
   updateTaskController,
   deleteTaskController,
 } from "../controllers/taskController.js";
+import { validate } from "../middleware/validateRequest.js";
+import { createTaskSchema } from "../validators/taskValidator.js";
+
 
 const router = express.Router();
 
-router.post("/", createTaskController);
+router.post("/", validate(createTaskSchema), createTaskController);
 router.get("/", getTasksController);
 router.get("/:id", getTaskByIdController);
 router.put("/:id", updateTaskController);
