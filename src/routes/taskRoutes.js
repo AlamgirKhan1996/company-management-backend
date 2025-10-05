@@ -7,7 +7,7 @@ import {
   deleteTaskController,
 } from "../controllers/taskController.js";
 import { validate } from "../middleware/validateRequest.js";
-import { createTaskSchema } from "../validators/taskValidator.js";
+import { createTaskSchema, updateTaskSchema } from "../validators/taskValidator.js";
 
 
 const router = express.Router();
@@ -15,7 +15,7 @@ const router = express.Router();
 router.post("/", validate(createTaskSchema), createTaskController);
 router.get("/", getTasksController);
 router.get("/:id", getTaskByIdController);
-router.put("/:id", updateTaskController);
+router.put("/:id", validate(updateTaskSchema), updateTaskController);
 router.delete("/:id", deleteTaskController);
 
 export default router;
