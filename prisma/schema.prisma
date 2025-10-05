@@ -37,6 +37,8 @@ model Department {
   projects Project[] @relation("DepartmentProjects")
 
   employees User[] @relation("DepartmentEmployees") // users who are employees of this department
+
+  employeesList Employee[] // opposite relation for Employee.department
 }
 
 model Project {
@@ -73,6 +75,9 @@ model Task {
   assignedToId String?
   activityLogs ActivityLog[]
 
+  employee   Employee? @relation("EmployeeTasks", fields: [employeeId], references: [id])
+  employeeId String?
+
   @@index([status])
   @@index([dueDate])
 }
@@ -93,6 +98,19 @@ model ActivityLog {
 
   task   Task?   @relation(fields: [taskId], references: [id])
   taskId String?
+}
+
+model Employee {
+  id           String     @id @default(uuid())
+  name         String
+  email        String     @unique
+  phone        String?
+  role         String
+  position     String?
+  salary       Float?
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  tasks        Task[]     @relation("EmployeeTasks")
 }
 
 enum UserRole {

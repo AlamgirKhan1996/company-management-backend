@@ -7,8 +7,21 @@ export const getAllTasks = async () => {
 };
 
 export const createTask = async (data) => {
+  const { title, description, status, dueDate, projectId, assignedToId } = data;
+
+  if (!projectId || !assignedToId) {
+    throw new Error("projectId and assignedToId are required");
+  }
+
   return await prisma.task.create({
-    data,
+    data: {
+      title,
+      description,
+      status,
+      dueDate: new Date(dueDate),
+      project: { connect: { id: projectId } },
+      assignedTo: { connect: { id: assignedToId } },
+    },
     include: { project: true, assignedTo: true },
   });
 };

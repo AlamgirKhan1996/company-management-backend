@@ -9,7 +9,7 @@ import {
 export const createEmployeeController = async (req, res) => {
   try {
     const employee = await createEmployee(req.body);
-    res.status(201).json(employee);
+    res.status(201).json({ message: "Employee created", employee });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
