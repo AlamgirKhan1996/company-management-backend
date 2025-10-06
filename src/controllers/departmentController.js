@@ -25,7 +25,7 @@ export const getDepartments = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-export const updateDepartment = async (req, res) => {
+export const updateDepartment = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name } = req.body;

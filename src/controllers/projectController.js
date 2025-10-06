@@ -22,14 +22,7 @@ export const createProject = async (req, res, next) => {
       createdBy: { connect: { id: String(userId) } },
       departments: { connect: departmentIds.length ? departmentIds.map(id => ({ id: String(id) })) : [] },
     });
-    await activityService.logActivity({
-      action: "CREATE_PROJECT",
-      entity: "Project",
-      details: `Project ${project.name} created`,
-      entityId: project.id,
-      entityType: "PROJECT",
-      userId: req.user.id
-    });
+   res.locals.createdProjectId = project.id; // Store created project ID in res.locals for logging
 
     res.status(201).json({ message: "Project created successfully", project });
   } catch (err) {

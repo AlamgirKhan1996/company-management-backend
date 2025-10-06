@@ -10,6 +10,7 @@ export const createUser = async (req, res, next) => {
       password,
       role
     });
+    res.locals.createdUserId = user.id; // Store created user in res.locals for logging
     res.status(201).json(user);
   } catch (err) {
     next(err);

@@ -3,6 +3,7 @@ import { createUser, getUsers, updateUser, deleteUser } from "../controllers/use
 import { authenticate, authorize } from "../middleware/authMiddleware.js";
 import { validate } from "../middleware/validateRequest.js";
 import { createUserSchema, updateUserSchema } from "../validators/userValidator.js"; 
+import { activityLogger } from "../middleware/activityLogger.js";
 
 
 const router = express.Router();
@@ -18,5 +19,14 @@ router.put(
   validate(updateUserSchema),
   updateUser
 );
+router.use(createUser, activityLogger({
+    action: "CREATE_USER",
+    entity: "User",
+    getEntityId: (req) => res.locals.createdUserId,
+    getDetails: (req) => ({
+      email: req.body.email,
+      role: req.body.role
+    })
+})); // Apply activityLogger middleware after user creation
 
 export default router;
