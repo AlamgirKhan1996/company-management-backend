@@ -7,6 +7,7 @@ import employeeRoutes from "./routes/employeeRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler.js";
+import activityRoutes from "./routes/activityRoutes.js";
 
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use(errorHandler);
+app.use("/api/activity-logs", activityRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
