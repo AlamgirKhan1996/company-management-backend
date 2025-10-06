@@ -37,3 +37,21 @@ export const getProjects = async (req, res, next) => {
     next(err);
   }
 };
+
+export const updateProject = async (req, res, next) => {
+  try {
+    const project = await projectsService.updateProject(req.params.id, req.body);
+    return res.json(project);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteProject = async (req, res, next) => {
+  try {
+    await projectsService.deleteProject(req.params.id);
+    return res.json({ message: "Project deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};

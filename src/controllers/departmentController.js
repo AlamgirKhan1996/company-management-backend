@@ -25,3 +25,26 @@ export const getDepartments = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+export const updateDepartment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const updatedDepartment = await departmentService.updateDepartment(id, name);
+    res.json({
+      success: true,
+      message: "Department updated successfully",
+      department: updatedDepartment,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const deleteDepartment = async (req, res) => {
+  try {
+    await departmentService.deleteDepartment(req.params.id);
+    res.json({ message: "Department deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

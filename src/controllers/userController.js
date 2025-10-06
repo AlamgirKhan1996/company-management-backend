@@ -25,3 +25,27 @@ export const getUsers = async (req, res, next) => {
     next(err);
   }
 };
+export const updateUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    const user = await userService.updateUser(id, data);
+    res.json({
+      success: true,
+      message: "User updated successfully",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const deleteUser = async (req, res) => {
+  try {
+    await userService.deleteUser(req.params.id);
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+

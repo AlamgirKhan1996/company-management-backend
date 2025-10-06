@@ -12,3 +12,15 @@ export const createProject = async (data) => {
     include: { departments: true },
   });
 };
+export const updateProject = async (id, data) => {
+  return await prisma.project.update({
+    where: { id },
+    data,
+    include: { departments: true },
+  });
+};
+export const deleteProject = async (id) => {
+  return await prisma.project.delete({
+    where: { id },
+  });
+};
