@@ -8,6 +8,7 @@ import taskRoutes from "./routes/taskRoutes.js";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler.js";
 import activityRoutes from "./routes/activityRoutes.js";
+import fileRoutes from "./routes/fileRoutes.js"; // Import file routes
 
 
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/employees", employeeRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use(errorHandler);
 app.use("/api/activity-logs", activityRoutes);
+app.use("/api/files", fileRoutes); // Serve static files from uploads directory
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

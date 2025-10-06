@@ -22,6 +22,7 @@ model User {
   activityLogs       ActivityLog[] @relation("performedByUser")
   employeeOf         Department[]  @relation("DepartmentEmployees") // departments where user is employee
   activityLogsAsUser ActivityLog[] @relation(fields: [], references: [])
+  File               File[]
 
   @@index([email])
 }
@@ -58,6 +59,8 @@ model Project {
 
   tasks        Task[]
   activityLogs ActivityLog[]
+
+  File File[]
 }
 
 model Task {
@@ -116,6 +119,19 @@ model Employee {
   department   Department @relation(fields: [departmentId], references: [id])
   departmentId String
   tasks        Task[]     @relation("EmployeeTasks")
+}
+
+model File {
+  id           String   @id @default(uuid())
+  filename     String
+  path         String
+  mimetype     String
+  size         Int
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id])
+  uploadedById String
+  project      Project? @relation(fields: [projectId], references: [id])
+  projectId    String?
+  createdAt    DateTime @default(now())
 }
 
 enum UserRole {
