@@ -16,11 +16,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  departments  Department[]  @relation("UserDepartments")
-  projects     Project[]     @relation("UserProjects")
-  tasks        Task[]        @relation("UserTasks")
-  activityLogs ActivityLog[]
-  employeeOf   Department[]  @relation("DepartmentEmployees") // departments where user is employee
+  departments        Department[]  @relation("UserDepartments")
+  projects           Project[]     @relation("UserProjects")
+  tasks              Task[]        @relation("UserTasks")
+  activityLogs       ActivityLog[] @relation("performedByUser")
+  employeeOf         Department[]  @relation("DepartmentEmployees") // departments where user is employee
+  activityLogsAsUser ActivityLog[] @relation(fields: [], references: [])
 
   @@index([email])
 }
@@ -83,12 +84,16 @@ model Task {
 }
 
 model ActivityLog {
-  id         String   @id @default(uuid())
-  action     String
-  meta       String?
-  entityType String? // e.g. PROJECT, TASK, USER
-  entityId   String? // related entity ID
-  createdAt  DateTime @default(now())
+  id            String   @id @default(uuid())
+  action        String
+  meta          String?
+  entity        String?
+  entityType    String? // e.g. PROJECT, TASK, USER
+  entityId      String? // related entity ID
+  details       String?
+  performedBy   User?    @relation("performedByUser", fields: [performedById], references: [id])
+  performedById String?
+  createdAt     DateTime @default(now())
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?

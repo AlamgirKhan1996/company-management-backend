@@ -24,6 +24,8 @@ export const createProject = async (req, res, next) => {
     });
     await activityService.logActivity({
       action: "CREATE_PROJECT",
+      entity: "Project",
+      details: `Project ${project.name} created`,
       entityId: project.id,
       entityType: "PROJECT",
       userId: req.user.id
