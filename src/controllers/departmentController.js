@@ -1,13 +1,24 @@
 import * as departmentService from "../services/departmentService.js";
+import * as activityService from "../services/activityService.js";
 
 // ✅ Create Department
 export const createDepartment = async (req, res, next) => {
   try {
     const { name } = req.body;
     const createdById = req.user.id;
-    console.log("Creating department for user:", createdById);
     // ✅ call service with TWO arguments, not an object
     const department = await departmentService.createDepartment(name, createdById);
+    await activityService.logActivity({
+      action: "CREATE_DEPARTMENT",
+      entity: "Department",
+      entityId: department.id,
+      userId: req.user.id,
+      details: JSON.stringify({
+        name: department.name,
+        description: department.description,
+
+      })
+    })
 
     res.status(201).json(department);
   } catch (err) {

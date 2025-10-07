@@ -5,10 +5,16 @@ import {
   updateEmployee,
   deleteEmployee,
 } from "../services/employeeService.js";
+import * as activityService from "../services/activityService.js";
 
 export const createEmployeeController = async (req, res) => {
   try {
     const employee = await createEmployee(req.body);
+    await activityService.logActivity({
+      action: "CREATE_EMPLOYEE",
+      entity: "Employee",
+      entityId: employee.id,
+    })
     res.status(201).json({ message: "Employee created", employee });
   } catch (error) {
     res.status(400).json({ error: error.message });

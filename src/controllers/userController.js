@@ -1,4 +1,5 @@
 import * as userService from "../services/userService.js";
+import * as activityService from "../services/activityService.js";
 
 // Create User
 export const createUser = async (req, res, next) => {
@@ -10,7 +11,10 @@ export const createUser = async (req, res, next) => {
       password,
       role
     });
-    res.locals.createdUserId = user.id; // Store created user in res.locals for logging
+    await activityService.logActivity({
+      action: "USER_CREATED",
+      entity: "User"
+    })
     res.status(201).json(user);
   } catch (err) {
     next(err);

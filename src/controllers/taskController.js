@@ -5,10 +5,23 @@ import {
   updateTask,
   deleteTask,
 } from "../services/taskService.js";
+import * as activityService from "../services/activityService.js";
 
 export const createTaskController = async (req, res) => {
   try {
     const task = await createTask(req.body);
+    await activityService.logActivity({
+      action: "TASK_CREATED",
+      entity: "Task",
+      entityId: task.id,
+      details: JSON.stringify({
+        description: task.description,
+        assignedToId: task.assignedToId,
+        employeeId: task.employeeId,
+        dueDate: task.dueDate,
+
+      })
+    })
     res.status(201).json(task);
   } catch (error) {
     res.status(400).json({ error: error.message });

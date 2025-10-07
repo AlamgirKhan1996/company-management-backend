@@ -1,4 +1,5 @@
 import prisma from "../utils/prismaClient.js";
+import * as activityService from "../services/activityService.js";
 
 export const uploadFile = async (req, res, next) => {
   try {
@@ -17,7 +18,10 @@ export const uploadFile = async (req, res, next) => {
       },
     });
 
-    res.locals.fileId = file.id; // for activity logging
+    await activityService.logActivity({
+      action: "FILE_UPLOAD",
+      entity: "File",
+    })
 
     res.status(201).json({ message: "File uploaded successfully", file });
   } catch (err) {
