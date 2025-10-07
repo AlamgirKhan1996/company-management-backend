@@ -22,5 +22,6 @@ export const updateProject = async (id, data) => {
 export const deleteProject = async (id) => {
   return await prisma.project.delete({
     where: { id },
+    include: { departments: true },
   });
 };

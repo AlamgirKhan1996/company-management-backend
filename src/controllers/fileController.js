@@ -19,9 +19,18 @@ export const uploadFile = async (req, res, next) => {
     });
 
     await activityService.logActivity({
-      action: "FILE_UPLOAD",
+      action: "FILE_UPLOADED",
       entity: "File",
-    })
+      entityId: file.id,
+      userId: req.user.id,
+      details: JSON.stringify({
+        filename: file.filename,
+        path: file.path,
+        mimetype: file.mimetype,
+        size: file.size,
+        projectId: projectId,
+      }),
+    });
 
     res.status(201).json({ message: "File uploaded successfully", file });
   } catch (err) {
@@ -37,6 +46,14 @@ export const getFiles = async (req, res, next) => {
         project: { select: { id: true, name: true } },
       },
       orderBy: { createdAt: "desc" },
+    });
+      await activityService.logActivity({
+      action: "GET_ALL_FILES",
+      entity: "File",
+      userId: req.user.id,
+      details: JSON.stringify({
+        fileCount: files.length
+      })
     });
     res.json(files);
   } catch (err) {

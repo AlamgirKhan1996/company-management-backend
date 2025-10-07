@@ -50,10 +50,14 @@ export const createProject = async (req, res, next) => {
 export const getProjects = async (req, res, next) => {
   try {
     const projects = await projectsService.getAllProjects();
-    await activityService.getActivityLogs({
+    await activityService.logActivity({
       action: "GET_PROJECT",
-      entity: "GetProject"
-    })
+      entity: "GetProject",
+      userId: req.user.id,
+      details: JSON.stringify({
+        projectCount: projects.length
+      })
+    });
     res.json(projects);
   } catch (err) {
     next(err);
@@ -64,6 +68,19 @@ export const getProjects = async (req, res, next) => {
 export const updateProject = async (req, res, next) => {
   try {
     const project = await projectsService.updateProject(req.params.id, req.body);
+    await activityService.logActivity({ 
+      action: "UPDATE_PROJECT",
+      entity: "Project",
+      entityId: project.id,
+      userId: req.user.id,
+      details: JSON.stringify({
+        name: project.name,
+        description: project.description,
+        startDate: project.startDate,
+        endDate: project.endDate,
+        status: project.status,
+      })
+    });
     res.locals.updatedProject = project; // optional for logging
     res.status(200).json(project);
   } catch (err) {
@@ -75,6 +92,15 @@ export const updateProject = async (req, res, next) => {
 export const deleteProject = async (req, res, next) => {
   try {
     await projectsService.deleteProject(req.params.id);
+    await activityService.logActivity({
+      action: "DELETE_PROJECT",
+      entity: "Project",
+      entityId: req.params.id,
+      userId: req.user.id,
+      details: JSON.stringify({
+        message: "Project deleted successfully"
+      })
+    });
     res.locals.deletedProjectId = req.params.id; // optional for logging
     res.json({ message: "Project deleted successfully" });
   } catch (err) {

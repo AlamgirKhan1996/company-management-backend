@@ -7,7 +7,7 @@ export const createProjectSchema = z.object({
   startDate: z.string(), // Expect date string, can parse later
   endDate: z.string().optional(),
   status: z.enum(["TODO", "IN_PROGRESS", "DONE"]),
-  departmentIds: z.array(z.string().uuid()),
+  departmentIds: z.array(z.string().uuid().optional()).default([]),
   userId: z.string().uuid(),
 });
 
