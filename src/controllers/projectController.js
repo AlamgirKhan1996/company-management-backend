@@ -25,21 +25,6 @@ export const createProject = async (req, res, next) => {
       createdBy: { connect: { id: String(userId) } },
       departments: { connect: departmentIds.length ? departmentIds.map(id => ({ id: String(id) })) : [] },
     });
-
-   await activityService.logActivity({
-      action: "CREATE_PROJECT",
-      entity: "Project",
-      entityId: project.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        name: project.name,
-        description: project.description,
-        startDate: project.startDate,
-        endDate: project.endDate,
-        status: project.status,
-      }),
-    });
-
     res.status(201).json({ message: "Project created successfully", project });
   } catch (err) {
     next(err);
@@ -50,14 +35,6 @@ export const createProject = async (req, res, next) => {
 export const getProjects = async (req, res, next) => {
   try {
     const projects = await projectsService.getAllProjects();
-    await activityService.logActivity({
-      action: "GET_PROJECT",
-      entity: "GetProject",
-      userId: req.user.id,
-      details: JSON.stringify({
-        projectCount: projects.length
-      })
-    });
     res.json(projects);
   } catch (err) {
     next(err);

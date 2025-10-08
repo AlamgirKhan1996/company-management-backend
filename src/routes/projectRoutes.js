@@ -8,6 +8,7 @@ import {
 import { authenticate, authorize } from "../middleware/authMiddleware.js";
 import { validate } from "../middleware/validateRequest.js";
 import { createProjectSchema } from "../validators/projectValidator.js";
+import { logActivity } from "../middleware/activityLogger.js";
 
 const router = express.Router();
 
@@ -16,7 +17,8 @@ router.post(
   "/",
   authenticate,
   authorize(["ADMIN", "MANAGER"]),
-  validate(createProjectSchema),
+  validate(createProjectSchema),logActivity("CREATE_PROJECT", "Project", (req) => `Created project: ${req.body.name}`),
+  logActivity("CREATE_PROJECT", "Project", (req) => `Created project: ${req.body.name}`),
   createProject, // ✅ controller first
 );
 

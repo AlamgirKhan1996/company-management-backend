@@ -10,15 +10,6 @@ import * as activityService from "../services/activityService.js";
 export const createEmployeeController = async (req, res) => {
   try {
     const employee = await createEmployee(req.body);
-    await activityService.logActivity({
-      action: "CREATE_EMPLOYEE",
-      entity: "Employee",
-      entityId: employee.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        name: employee.name,
-      })
-    });
     res.status(201).json({ message: "Employee created", employee });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -28,14 +19,6 @@ export const createEmployeeController = async (req, res) => {
 export const getEmployeesController = async (req, res) => {
   try {
     const employees = await getAllEmployees();
-      await activityService.logActivity({
-      action: "GET_ALL_EMPLOYEES",
-      entity: "Employee",
-      userId: req.user.id,
-      details: JSON.stringify({
-        employeeCount: employees.length
-      })
-    });
     res.json(employees);
   } catch (error) {
     res.status(500).json({ error: error.message });

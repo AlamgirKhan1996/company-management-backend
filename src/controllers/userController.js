@@ -11,17 +11,17 @@ export const createUser = async (req, res, next) => {
       password,
       role
     });
-    await activityService.logActivity({
-      action: "USER_CREATED",
-      entity: "User",
-      entityId: user.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        name: user.name,
-        email: user.email,
-        role: user.role
-      })
-    });
+    // await activityService.logActivity({
+    //   action: "USER_CREATED",
+    //   entity: "User",
+    //   entityId: user.id,
+    //   userId: req.user.id,
+    //   details: JSON.stringify({
+    //     name: user.name,
+    //     email: user.email,
+    //     role: user.role
+    //   })
+    // });
     res.status(201).json(user);
   } catch (err) {
     next(err);
@@ -32,14 +32,14 @@ export const createUser = async (req, res, next) => {
 export const getUsers = async (req, res, next) => {
   try {
     const users = await userService.getAllUsers();
-    await activityService.logActivity({
-      action: "GET_ALL_USERS",
-      entity: "User",
-      userId: req.user.id,
-      details: JSON.stringify({
-        userCount: users.length
-      })
-    });
+    // await activityService.logActivity({
+    //   action: "GET_ALL_USERS",
+    //   entity: "User",
+    //   userId: req.user.id,
+    //   details: JSON.stringify({
+    //     userCount: users.length
+    //   })
+    // });
     res.json(users);
   } catch (err) {
     next(err);
