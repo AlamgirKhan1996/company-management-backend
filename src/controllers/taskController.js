@@ -35,13 +35,13 @@ export const getTasksController = async (req, res) => {
       action: "GET_ALL_TASKS",
       entity: "Task",
       userId: req.user,
-      status: "SUCCESS",
       details: JSON.stringify({
         taskCount: tasks.length
       })
     });
-    res.json(tasks);
+    res.status(200).json(tasks);
   } catch (error) {
+    console.error("Error fetching tasks:", error);
     res.status(500).json({ error: error.message });
   }
 };

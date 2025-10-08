@@ -1,11 +1,4 @@
 import prisma from "../utils/prismaClient.js";
-
-export const getAllTasks = async () => {
-  return await prisma.task.findMany({
-    include: { project: true, assignedTo: true },
-  });
-};
-
 export const createTask = async (data) => {
   const { title, description, status, dueDate, projectId, assignedToId } = data;
 
@@ -25,6 +18,16 @@ export const createTask = async (data) => {
     include: { project: true, assignedTo: true },
   });
 };
+
+export const getAllTasks = async () => {
+  return await prisma.task.findMany({
+    include: {
+      project: true,
+      assignedTo: true,
+    },
+    });
+};
+
 
 export const getTaskById = async (id) => {
   return await prisma.task.findUnique({
