@@ -68,18 +68,18 @@ export const getTaskByIdController = async (req, res) => {
 export const updateTaskController = async (req, res) => {
   try {
     const task = await updateTask(req.params.id, req.body);
-    await activityService.logActivity({
-      action: "TASK_UPDATED",
-      entity: "Task",
-      entityId: task.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        description: task.description,
-        assignedToId: task.assignedToId,
-        employeeId: task.employeeId,
-        dueDate: task.dueDate,
-      })
-    });
+    // await activityService.logActivity({
+    //   action: "TASK_UPDATED",
+    //   entity: "Task",
+    //   entityId: task.id,
+    //   userId: req.user.id,
+    //   details: JSON.stringify({
+    //     description: task.description,
+    //     assignedToId: task.assignedToId,
+    //     employeeId: task.employeeId,
+    //     dueDate: task.dueDate,
+    //   })
+    // });
     res.json(task);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -89,15 +89,15 @@ export const updateTaskController = async (req, res) => {
 export const deleteTaskController = async (req, res) => {
   try {
     await deleteTask(req.params.id);
-    await activityService.logActivity({
-      action: "TASK_DELETED",
-      entity: "Task",
-      entityId: req.params.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        message: "Task deleted successfully"
-      })
-    });
+    // await activityService.logActivity({
+    //   action: "TASK_DELETED",
+    //   entity: "Task",
+    //   entityId: req.params.id,
+    //   userId: req.user.id,
+    //   details: JSON.stringify({
+    //     message: "Task deleted successfully"
+    //   })
+    // });
     res.json({ message: "Task deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });

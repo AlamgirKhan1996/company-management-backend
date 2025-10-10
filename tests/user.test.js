@@ -69,4 +69,54 @@ describe("User API", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error");
   });
-});
+  test("✅ Admin should fetch all users", async () => {
+    const res = await request(app)
+      .get("/api/users")
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body[0]).toHaveProperty("email");
+    expect(res.body[0]).not.toHaveProperty("password")});
+    test("❌ Non-admin should be forbidden to fetch all users", async () => {
+      // Login as regular user
+      const userLoginRes = await request(app).post("/api/auth/login").send({
+        email: "john@example.com",
+        password: "password123",
+      });
+
+      const userToken = userLoginRes.body.token;
+
+      const res = await request(app)
+        .get("/api/users")
+        .set("Authorization", `Bearer ${userToken}`);
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body).toHaveProperty("error");
+    });
+    test("Admin should update a user", async () => {
+      // First, get user ID of John Doe
+      const usersRes = await request(app)
+        .get("/api/users")
+        .set("Authorization", `Bearer ${adminToken}`);
+      const john = usersRes.body.find((u) => u.email === "john@example.com");
+
+      const res = await request(app)
+        .put(`/api/users/${john.id}`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          name: "John Updated",
+          email: "john.updated@example.com",
+          role: "EMPLOYEE",
+        });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty("message", "User updated successfully");})
+    test("Admin should delete a user", async () => {
+      // First, get user ID of John Updated
+      const usersRes = await request(app)
+        .get("/api/users")
+        .set("Authorization", `Bearer ${adminToken}`);
+      const john = usersRes.body.find((u) => u.email === "john.updated@example.com");})
+    });

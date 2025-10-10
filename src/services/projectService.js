@@ -15,7 +15,11 @@ export const createProject = async (data) => {
 export const updateProject = async (id, data) => {
   return await prisma.project.update({
     where: { id },
-    data,
+    data: {
+      ...data,
+      endDate: data.endDate? new Date(data.endDate) : undefined,
+      startDate: data.startDate? new Date(data.startDate) : undefined,
+    },
     include: { departments: true },
   });
 };

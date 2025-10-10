@@ -6,6 +6,8 @@ import { de } from "zod/locales";
 
 let token;
 let user;
+let createdDeptId;
+let departmentId;
 
 beforeAll(async () => {
   // Create a fake user in the DB (admin or manager)
@@ -26,6 +28,8 @@ beforeAll(async () => {
     { expiresIn: "1h" }
   );
 });
+
+
 
 afterAll(async () => {
   await prisma.activityLog.deleteMany();
@@ -51,6 +55,7 @@ describe("POST /api/projects", () => {
         status: "IN_PROGRESS",
         userId: user.id,
       });
+      createdDeptId = res.body.project.id;
 
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty("project");
@@ -60,5 +65,39 @@ describe("POST /api/projects", () => {
       where: { action: "CREATE_PROJECT" },
     });
     expect(log).not.toBeNull();
+  });
+  it("should get all projects", async () => {
+    const res = await request(app)
+      .get("/api/projects")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+  it("should update projects", async () => {
+    const res = await request(app)
+      .put(`/api/projects/${createdDeptId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({ name: "Updated Project Name",
+        description: "Updated description",
+        startDate: "2025-11-01",
+        endDate: "2026-01-01",
+        status: "COMPLETED",
+        departmentId,
+      });
+
+    expect(res.statusCode).toBe(200);
+  expect(res.body).toHaveProperty("id");
+  expect(res.body.name).toBe("Updated Project Name");
+
+  });
+
+  it("should delete a project", async () => {
+    const res = await request(app)
+      .delete(`/api/projects/${createdDeptId}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("message");
   });
 });

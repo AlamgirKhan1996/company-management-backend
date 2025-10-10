@@ -31,21 +31,7 @@ export const updateDepartment = async (req, res, next) => {
     const { name } = req.body;
 
     const updatedDepartment = await departmentService.updateDepartment(id, name);
-    await activityService.logActivity({
-      action: "UPDATE_DEPARTMENT",
-      entity: "Department",
-      entityId: updatedDepartment.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        name: updatedDepartment.name,
-        description: updatedDepartment.description,
-      })
-    });
-    res.json({
-      success: true,
-      message: "Department updated successfully",
-      department: updatedDepartment,
-    });
+    return res.status(200).json(updatedDepartment);
   } catch (error) {
     next(error);
   }
@@ -53,16 +39,7 @@ export const updateDepartment = async (req, res, next) => {
 export const deleteDepartment = async (req, res) => {
   try {
     await departmentService.deleteDepartment(req.params.id);
-    await activityService.logActivity({
-      action: "DELETE_DEPARTMENT",
-      entity: "Department",
-      entityId: req.params.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        message: "Department deleted successfully"
-      })
-    });
-    res.json({ message: "Department deleted successfully" });
+    return res.status(200).json({ message: "Department deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -7,6 +7,7 @@ let token;
 let projectId;
 let userId;
 let assignedToId;
+let task;
 
 beforeAll(async () => {
   // cleanup
@@ -77,6 +78,7 @@ describe("Task API", () => {
       });
 
     console.log("Task creation response:", res.body);
+    task = res.body; // store for later tests
     expect(res.statusCode).toBe(201);
     expect(res.body.title).toBe("Setup CI/CD");
   });
@@ -88,6 +90,33 @@ describe("Task API", () => {
 
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it("should update a task", async () => {
+    const updateRes = await request(app)
+      .put(`/api/tasks/${task.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        title: "Setup CI/CD - Updated",
+        description: "Configure pipeline for deployments - Updated",
+        status: "IN_PROGRESS",
+        dueDate: new Date("2025-11-15"),
+        projectId,
+        assignedToId,
+      });
+      console.log("Task update response:", updateRes.body);
+
+    expect(updateRes.statusCode).toBe(200);
+    expect(updateRes.body.title).toBe("Setup CI/CD - Updated");
+  });
+  it("should delete a task", async () => {
+
+    const deleteRes = await request(app)
+      .delete(`/api/tasks/${task.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(deleteRes.statusCode).toBe(200);
+    expect(deleteRes.body.message).toBe("Task deleted successfully");
   });
 });
 
