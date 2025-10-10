@@ -13,6 +13,46 @@ import { logActivity } from "../middleware/activityLogger.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Tasks
+ *   description: Task management APIs
+ *
+ * /api/tasks:
+ *   get:
+ *     summary: Get all tasks
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all tasks
+ *
+ *   post:
+ *     summary: Create a new task
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               projectId:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Task created successfully
+ */
+
+
 router.post("/", validate(createTaskSchema), logActivity("CREATE_TASK", "Task", (req) => `Created task: ${req.body.name}`), createTaskController);
 router.get("/", logActivity("GET_ALL_TASKS", "Task"), getTasksController);
 router.get("/:id", logActivity("GET_TASK", "Task", (req) => `Fetched task: ${req.params.id}`), getTaskByIdController);

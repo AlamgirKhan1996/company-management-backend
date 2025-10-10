@@ -6,6 +6,44 @@ import { createDepartmentSchema } from "../validators/departmentValidator.js";
 import { logActivity } from "../middleware/activityLogger.js";
 
 const router = express.Router();
+/**
+ * @swagger
+ * tags:
+ *   name: Departments
+ *   description: Department management APIs
+ */
+/**
+ * @swagger
+ * tags:
+ *   name: getDepartments
+ *   description: Department management and retrieval
+ *
+ * /api/departments:
+ *   get:
+ *     summary: Get all departments
+ *     tags: [Departments]
+ *     responses:
+ *       200:
+ *         description: Successfully fetched all departments
+ *   post:
+ *     summary: Create a new department
+ *     tags: [Departments]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: IT Department
+ *     responses:
+ *       201:
+ *         description: Department created successfully
+ */
 
 router.post("/", authenticate, authorize(["ADMIN"]), validate(createDepartmentSchema),logActivity("CREATE_DEPARTMENT", "Department", (req) => `Created department: ${req.body.name}`), createDepartment);
 router.get("/", authenticate,logActivity("GET_ALL_DEPARTMENTS", "Department"), getDepartments);
