@@ -1,5 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
 import { swaggerSpec } from "./config/swagger.js";
 import swaggerUi from "swagger-ui-express";
 import userRoutes from "./routes/userRoutes.js";
@@ -14,6 +17,20 @@ import fileRoutes from "./routes/fileRoutes.js"; // Import file routes
 
 dotenv.config();
 const app = express();
+// Security Middleware
+app.use(helmet()); // Sets secure HTTP headers
+
+// Optional Professional Touch
+// For production, you can restrict CORS to your frontend domain:
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "https://mycompany.com"
+}));
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // max 100 requests per IP
+  message: "Too many requests from this IP, please try again later."
+});
+app.use(limiter);
 
 
 app.use(express.json());
