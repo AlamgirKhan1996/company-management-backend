@@ -1,6 +1,7 @@
 import * as projectsService from "../services/projectService.js";
 import * as activityService from "../services/activityService.js";
 import { json } from "zod";
+import logger from "../utils/logger.js";
 
 // Create Project
 export const createProject = async (req, res, next) => {
@@ -25,8 +26,10 @@ export const createProject = async (req, res, next) => {
       createdBy: { connect: { id: String(userId) } },
       departments: { connect: departmentIds.length ? departmentIds.map(id => ({ id: String(id) })) : [] },
     });
+    logger.info(`✅ Project created successfully: ${project.name} ID: ${project.id} by user${userId} department ${departmentIds}`);
     res.status(201).json({ message: "Project created successfully", project });
   } catch (err) {
+    logger.error(`error creating project${err.message}`)
     next(err);
   }
 };
@@ -35,8 +38,10 @@ export const createProject = async (req, res, next) => {
 export const getProjects = async (req, res, next) => {
   try {
     const projects = await projectsService.getAllProjects();
+    logger.info(`Get All Projects: ${projects.map(project => project.name)} ${projects.length} IDs: ${projects.map(project => project.id)}`);
     res.json(projects);
   } catch (err) {
+    logger.error(`error get all projects: ${err.message}`)
     next(err);
   }
 };
@@ -58,9 +63,11 @@ export const updateProject = async (req, res, next) => {
         status: project.status,
       })
     });
+    logger.info(`✅ Project updated successfully: ${project.name} ID: ${project.id} by user ${req.user?.id || "unknown"}`);
     res.locals.updatedProject = project; // optional for logging
     res.status(200).json(project);
   } catch (err) {
+    logger.error(`❌ Error updating project: ${err.message}`);
     next(err);
   }
 };
@@ -78,9 +85,11 @@ export const deleteProject = async (req, res, next) => {
         message: "Project deleted successfully"
       })
     });
+    logger.info(`✅ Project deleted successfully: ID: ${req.params.id} by user ${req.user?.id || "unknown"}`);
     res.locals.deletedProjectId = req.params.id; // optional for logging
     res.json({ message: "Project deleted successfully" });
   } catch (err) {
+    logger.error(`❌ Error deleting project: ${err.message}`);
     next(err);
   }
 };

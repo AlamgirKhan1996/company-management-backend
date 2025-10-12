@@ -1,0 +1,399 @@
+2025-10-12 14:01:54 [INFO]: ::1 - - [12/Oct/2025:11:01:54 +0000] "GET / HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+2025-10-12 14:01:55 [INFO]: ::1 - - [12/Oct/2025:11:01:55 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+2025-10-12 14:02:10 [INFO]: ::1 - - [12/Oct/2025:11:02:10 +0000] "GET /api/task HTTP/1.1" 404 147 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+2025-10-12 14:02:28 [INFO]: ::1 - - [12/Oct/2025:11:02:28 +0000] "GET /api/tasks HTTP/1.1" 200 2 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+2025-10-12 14:04:13 [INFO]: ::1 - - [12/Oct/2025:11:04:13 +0000] "GET /api/projects HTTP/1.1" 401 29 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+2025-10-12 14:19:07 [INFO]: ::1 - - [12/Oct/2025:11:19:07 +0000] "POST /api/auth/login HTTP/1.1" 400 26 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:19:50 [INFO]: ::1 - - [12/Oct/2025:11:19:50 +0000] "POST /api/auth/register HTTP/1.1" 201 77 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:20:02 [INFO]: ::1 - - [12/Oct/2025:11:20:02 +0000] "POST /api/auth/login HTTP/1.1" 200 256 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:30:18 [INFO]: ::1 - - [12/Oct/2025:11:30:18 +0000] "POST /api/projects HTTP/1.1" 500 50 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:31:06 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. No 'User' record (needed to inline the relation on 'Project' record(s)) was found for a nested connect on one-to-many relation 'UserProjects'.
+2025-10-12 14:31:07 [INFO]: ::1 - - [12/Oct/2025:11:31:07 +0000] "POST /api/projects HTTP/1.1" 500 321 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:42:20 [INFO]: ::1 - - [12/Oct/2025:11:42:20 +0000] "POST /api/departments HTTP/1.1" 401 29 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:55:16 [INFO]: ::1 - - [12/Oct/2025:11:55:16 +0000] "POST /api/departments HTTP/1.1" 201 353 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:55:30 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. No 'User' record (needed to inline the relation on 'Project' record(s)) was found for a nested connect on one-to-many relation 'UserProjects'.
+2025-10-12 14:55:30 [INFO]: ::1 - - [12/Oct/2025:11:55:30 +0000] "POST /api/projects HTTP/1.1" 500 321 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:55:58 [INFO]: ::1 - - [12/Oct/2025:11:55:58 +0000] "POST /api/auth/register HTTP/1.1" 400 31 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:56:41 [INFO]: ::1 - - [12/Oct/2025:11:56:41 +0000] "GET /api/users HTTP/1.1" 200 217 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:57:49 [ERROR]: error creating projectcreatedById is not defined
+2025-10-12 14:57:49 [INFO]: ::1 - - [12/Oct/2025:11:57:49 +0000] "POST /api/projects HTTP/1.1" 500 56 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:58:42 [ERROR]: error creating projectcreatedId is not defined
+2025-10-12 14:58:42 [INFO]: ::1 - - [12/Oct/2025:11:58:42 +0000] "POST /api/projects HTTP/1.1" 500 54 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:59:03 [ERROR]: error creating projectcreatedId is not defined
+2025-10-12 14:59:03 [INFO]: ::1 - - [12/Oct/2025:11:59:03 +0000] "POST /api/projects HTTP/1.1" 500 54 "-" "PostmanRuntime/7.48.0"
+2025-10-12 14:59:57 [ERROR]: error creating projectcreatedBy is not defined
+2025-10-12 14:59:57 [INFO]: ::1 - - [12/Oct/2025:11:59:57 +0000] "POST /api/projects HTTP/1.1" 500 54 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:00:19 [INFO]: ✅ Project created successfully: Professional website design  ID: 067357e1-ae80-4928-b59d-22bcbd6389b8 by user
+2025-10-12 15:00:19 [INFO]: ::1 - - [12/Oct/2025:12:00:19 +0000] "POST /api/projects HTTP/1.1" 201 631 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:01:11 [INFO]: ✅ Project created successfully: Professional website design  ID: 3c76579c-29cb-4b38-a485-9a48857f680b by userfdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 15:01:11 [INFO]: ::1 - - [12/Oct/2025:12:01:11 +0000] "POST /api/projects HTTP/1.1" 201 631 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:07:00 [INFO]: ::1 - - [12/Oct/2025:12:07:00 +0000] "GET /api/projects HTTP/1.1" 401 29 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+2025-10-12 15:07:18 [INFO]: ::ffff:192.168.43.26 - - [12/Oct/2025:12:07:18 +0000] "GET / HTTP/1.1" 200 38 "-" "AVG Antivirus"
+2025-10-12 15:07:27 [INFO]: ::ffff:192.168.43.26 - - [12/Oct/2025:12:07:27 +0000] "GET / HTTP/1.1" 200 38 "-" "-"
+2025-10-12 15:07:27 [INFO]: ::ffff:192.168.43.26 - - [12/Oct/2025:12:07:27 +0000] "GET /loginMsg.js HTTP/1.1" 404 150 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko"
+2025-10-12 15:07:27 [INFO]: ::ffff:192.168.43.26 - - [12/Oct/2025:12:07:27 +0000] "GET /cgi/get.cgi?cmd=home_login HTTP/1.1" 404 150 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko"
+2025-10-12 15:21:28 [INFO]: ✅ Project created successfully: Professional website design  ID: 5b844bd2-f8a5-49ef-b989-2a4a1e91ef0e by userfdf956b6-2ef0-47ea-bbb4-15bdf9d663be department 273b8ee4-bdca-4731-86ae-4b1d7ec5327c
+2025-10-12 15:21:28 [INFO]: ::1 - - [12/Oct/2025:12:21:28 +0000] "POST /api/projects HTTP/1.1" 201 631 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:22:24 [INFO]: ✅ Task created successfully: 20dd7f19-4ef1-426f-a1dc-316d6528e34f by user unknown
+2025-10-12 15:22:24 [INFO]: ::1 - - [12/Oct/2025:12:22:24 +0000] "POST /api/tasks HTTP/1.1" 201 1012 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:25:48 [INFO]: Get All Projects: [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] IDs: f79c3f69-544e-4221-ae7b-f20dc50701ce,a0a7772c-001b-47f0-862e-b4e1fc8f0ec5,3c670207-e136-4198-9a17-408ef9572334,e171ea43-1b57-45db-b1e0-c51d97e34e9f,067357e1-ae80-4928-b59d-22bcbd6389b8,3c76579c-29cb-4b38-a485-9a48857f680b,5b844bd2-f8a5-49ef-b989-2a4a1e91ef0e
+2025-10-12 15:25:48 [INFO]: ::1 - - [12/Oct/2025:12:25:48 +0000] "GET /api/projects HTTP/1.1" 200 4500 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:26:59 [ERROR]: error get all projectsproject is not defined
+2025-10-12 15:26:59 [INFO]: ::1 - - [12/Oct/2025:12:26:59 +0000] "GET /api/projects HTTP/1.1" 500 52 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:27:19 [INFO]: Get All Projects: undefined IDs: f79c3f69-544e-4221-ae7b-f20dc50701ce,a0a7772c-001b-47f0-862e-b4e1fc8f0ec5,3c670207-e136-4198-9a17-408ef9572334,e171ea43-1b57-45db-b1e0-c51d97e34e9f,067357e1-ae80-4928-b59d-22bcbd6389b8,3c76579c-29cb-4b38-a485-9a48857f680b,5b844bd2-f8a5-49ef-b989-2a4a1e91ef0e
+2025-10-12 15:27:19 [INFO]: ::1 - - [12/Oct/2025:12:27:19 +0000] "GET /api/projects HTTP/1.1" 200 4500 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:28:06 [INFO]: Get All Projects: 7 IDs: f79c3f69-544e-4221-ae7b-f20dc50701ce,a0a7772c-001b-47f0-862e-b4e1fc8f0ec5,3c670207-e136-4198-9a17-408ef9572334,e171ea43-1b57-45db-b1e0-c51d97e34e9f,067357e1-ae80-4928-b59d-22bcbd6389b8,3c76579c-29cb-4b38-a485-9a48857f680b,5b844bd2-f8a5-49ef-b989-2a4a1e91ef0e
+2025-10-12 15:28:06 [INFO]: ::1 - - [12/Oct/2025:12:28:06 +0000] "GET /api/projects HTTP/1.1" 200 4500 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:30:27 [INFO]: Get All Projects: Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design  7 IDs: f79c3f69-544e-4221-ae7b-f20dc50701ce,a0a7772c-001b-47f0-862e-b4e1fc8f0ec5,3c670207-e136-4198-9a17-408ef9572334,e171ea43-1b57-45db-b1e0-c51d97e34e9f,067357e1-ae80-4928-b59d-22bcbd6389b8,3c76579c-29cb-4b38-a485-9a48857f680b,5b844bd2-f8a5-49ef-b989-2a4a1e91ef0e
+2025-10-12 15:30:27 [INFO]: ::1 - - [12/Oct/2025:12:30:27 +0000] "GET /api/projects HTTP/1.1" 200 4500 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:31:56 [ERROR]: error creating projectproject is not defined
+2025-10-12 15:31:56 [INFO]: ::1 - - [12/Oct/2025:12:31:56 +0000] "POST /api/projects HTTP/1.1" 500 52 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:35:32 [ERROR]: error creating projectdepartmentIds is not defined
+2025-10-12 15:35:32 [INFO]: ::1 - - [12/Oct/2025:12:35:32 +0000] "POST /api/projects HTTP/1.1" 500 58 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:36:18 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
++   name: String
+  },
+  include: {
+    departments: true
+  }
+}
+
+Argument `name` is missing.
+2025-10-12 15:36:18 [INFO]: ::1 - - [12/Oct/2025:12:36:18 +0000] "POST /api/projects HTTP/1.1" 500 193 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:37:58 [ERROR]: error creating projectdata is not defined
+2025-10-12 15:37:58 [INFO]: ::1 - - [12/Oct/2025:12:37:58 +0000] "POST /api/projects HTTP/1.1" 500 49 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:39:55 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
+    name: "website redesign ",
+    description: "design professional website ",
+    startDate: "2025-11-05",
+    endDate: "2025-12-05",
+    status: "IN_PROGRESS",
+    departmentIds: [
+      "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+    ],
+    userId: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be",
++   createdBy: {
++     create: UserCreateWithoutProjectsInput | UserUncheckedCreateWithoutProjectsInput,
++     connectOrCreate: UserCreateOrConnectWithoutProjectsInput,
++     connect: UserWhereUniqueInput
++   }
+  },
+  include: {
+    departments: true
+  }
+}
+
+Argument `createdBy` is missing.
+2025-10-12 15:39:55 [INFO]: ::1 - - [12/Oct/2025:12:39:55 +0000] "POST /api/projects HTTP/1.1" 500 707 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:44:20 [ERROR]: error creating projectCannot access 'userId' before initialization
+2025-10-12 15:44:20 [INFO]: ::1 - - [12/Oct/2025:12:44:20 +0000] "POST /api/projects HTTP/1.1" 500 74 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:45:01 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
+    name: "website redesign ",
+    description: "design professional website ",
+    startDate: "2025-11-05",
+    endDate: "2025-12-05",
+    status: "IN_PROGRESS",
+    departmentIds: [
+      "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+    ],
+    userId: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be",
++   createdBy: {
++     create: UserCreateWithoutProjectsInput | UserUncheckedCreateWithoutProjectsInput,
++     connectOrCreate: UserCreateOrConnectWithoutProjectsInput,
++     connect: UserWhereUniqueInput
++   }
+  },
+  include: {
+    departments: true
+  }
+}
+
+Argument `createdBy` is missing.
+2025-10-12 15:45:01 [INFO]: ::1 - - [12/Oct/2025:12:45:01 +0000] "POST /api/projects HTTP/1.1" 500 707 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:46:48 [ERROR]: error creating projectcreatedBy is not defined
+2025-10-12 15:46:48 [INFO]: ::1 - - [12/Oct/2025:12:46:48 +0000] "POST /api/projects HTTP/1.1" 500 54 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:47:24 [ERROR]: error creating projectcreatedBy is not defined
+2025-10-12 15:47:24 [INFO]: ::1 - - [12/Oct/2025:12:47:24 +0000] "POST /api/projects HTTP/1.1" 500 54 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:49:51 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
+    name: "website redesign ",
+    description: "design professional website ",
+    startDate: "2025-11-05",
+    endDate: "2025-12-05",
+    status: "IN_PROGRESS",
+    departmentIds: [
+      "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+    ],
+    userId: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be",
++   createdBy: {
++     create: UserCreateWithoutProjectsInput | UserUncheckedCreateWithoutProjectsInput,
++     connectOrCreate: UserCreateOrConnectWithoutProjectsInput,
++     connect: UserWhereUniqueInput
++   }
+  },
+  include: {
+    departments: true,
+    createdBy: true
+  }
+}
+
+Argument `createdBy` is missing.
+2025-10-12 15:49:51 [INFO]: ::1 - - [12/Oct/2025:12:49:51 +0000] "POST /api/projects HTTP/1.1" 500 729 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:50:29 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
+    name: "website redesign ",
+    description: "design professional website ",
+    startDate: "2025-11-05",
+    endDate: "2025-12-05",
+    status: "IN_PROGRESS",
+    departmentIds: [
+      "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+    ],
+    userId: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be",
++   createdBy: {
++     create: UserCreateWithoutProjectsInput | UserUncheckedCreateWithoutProjectsInput,
++     connectOrCreate: UserCreateOrConnectWithoutProjectsInput,
++     connect: UserWhereUniqueInput
++   }
+  },
+  include: {
+    departments: true,
+    createdBy: true
+  }
+}
+
+Argument `createdBy` is missing.
+2025-10-12 15:50:29 [INFO]: ::1 - - [12/Oct/2025:12:50:29 +0000] "POST /api/projects HTTP/1.1" 500 729 "-" "PostmanRuntime/7.48.0"
+2025-10-12 15:54:01 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
+    name: "website redesign ",
+    description: "design professional website ",
+    startDate: "2025-11-05",
+    endDate: "2025-12-05",
+    status: "IN_PROGRESS",
+    departmentIds: [
+      "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+    ],
+    userId: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be",
++   createdBy: {
++     create: UserCreateWithoutProjectsInput | UserUncheckedCreateWithoutProjectsInput,
++     connectOrCreate: UserCreateOrConnectWithoutProjectsInput,
++     connect: UserWhereUniqueInput
++   }
+  },
+  include: {
+    departments: true,
+    createdBy: true
+  }
+}
+
+Argument `createdBy` is missing.
+2025-10-12 15:54:01 [INFO]: ::1 - - [12/Oct/2025:12:54:01 +0000] "POST /api/projects HTTP/1.1" 500 729 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:07:01 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
+    name: "website redesign ",
+    description: "design professional website ",
+    startDate: "2025-11-05",
+    endDate: "2025-12-05",
+    status: "IN_PROGRESS",
+    departmentIds: [
+      "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+    ],
+    userId: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be",
++   createdBy: {
++     create: UserCreateWithoutProjectsInput | UserUncheckedCreateWithoutProjectsInput,
++     connectOrCreate: UserCreateOrConnectWithoutProjectsInput,
++     connect: UserWhereUniqueInput
++   }
+  },
+  include: {
+    departments: true,
+    createdBy: true
+  }
+}
+
+Argument `createdBy` is missing.
+2025-10-12 16:07:02 [INFO]: ::1 - - [12/Oct/2025:13:07:01 +0000] "POST /api/projects HTTP/1.1" 500 729 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:07:26 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
+    name: "website redesign ",
+    description: "design professional website ",
+    startDate: "2025-11-05",
+    endDate: "2025-12-05",
+    status: "IN_PROGRESS",
+    departmentIds: [
+      "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+    ],
+    userId: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be",
++   createdBy: {
++     create: UserCreateWithoutProjectsInput | UserUncheckedCreateWithoutProjectsInput,
++     connectOrCreate: UserCreateOrConnectWithoutProjectsInput,
++     connect: UserWhereUniqueInput
++   }
+  },
+  include: {
+    departments: true,
+    createdBy: true
+  }
+}
+
+Argument `createdBy` is missing.
+2025-10-12 16:07:26 [INFO]: ::1 - - [12/Oct/2025:13:07:26 +0000] "POST /api/projects HTTP/1.1" 500 729 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:21:14 [ERROR]: error creating projectdepartmentIds is not defined
+2025-10-12 16:21:14 [INFO]: ::1 - - [12/Oct/2025:13:21:14 +0000] "POST /api/projects HTTP/1.1" 500 58 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:21:47 [ERROR]: error creating project
+Invalid `prisma.project.create()` invocation:
+
+{
+  data: {
+    name: "website redesign ",
+    description: "design professional website ",
+    startDate: new Date("2025-11-05T00:00:00.000Z"),
+    endDate: new Date("2025-12-05T00:00:00.000Z"),
+    status: "IN_PROGRESS",
+    departmentIds: [
+    ~~~~~~~~~~~~~
+      "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+    ],
+    userId: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be",
+    createdBy: {
+      connect: {
+        id: "fdf956b6-2ef0-47ea-bbb4-15bdf9d663be"
+      }
+    },
+    departments: {
+      connect: [
+        {
+          id: "273b8ee4-bdca-4731-86ae-4b1d7ec5327c"
+        }
+      ]
+    },
+?   id?: String,
+?   createdAt?: DateTime,
+?   updatedAt?: DateTime,
+?   tasks?: TaskCreateNestedManyWithoutProjectInput,
+?   activityLogs?: ActivityLogCreateNestedManyWithoutProjectInput,
+?   File?: FileCreateNestedManyWithoutProjectInput
+  },
+  include: {
+    departments: true,
+    createdBy: true
+  }
+}
+
+Unknown argument `departmentIds`. Did you mean `departments`? Available options are marked with ?.
+2025-10-12 16:21:47 [INFO]: ::1 - - [12/Oct/2025:13:21:47 +0000] "POST /api/projects HTTP/1.1" 500 1132 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:22:48 [ERROR]: error creating projectdepartmentIds is not defined
+2025-10-12 16:22:48 [INFO]: ::1 - - [12/Oct/2025:13:22:48 +0000] "POST /api/projects HTTP/1.1" 500 58 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:23:06 [INFO]: ✅ Project created successfully: website redesign  ID: 5f73e7a8-9de3-4a36-9161-469a8f433bdc by userfdf956b6-2ef0-47ea-bbb4-15bdf9d663be department 273b8ee4-bdca-4731-86ae-4b1d7ec5327c
+2025-10-12 16:23:06 [INFO]: ::1 - - [12/Oct/2025:13:23:06 +0000] "POST /api/projects HTTP/1.1" 201 893 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:23:21 [INFO]: ✅ Project created successfully: website reredesign  ID: 2d6bf801-6747-48c9-892c-031c33a4df17 by userfdf956b6-2ef0-47ea-bbb4-15bdf9d663be department 273b8ee4-bdca-4731-86ae-4b1d7ec5327c
+2025-10-12 16:23:21 [INFO]: ::1 - - [12/Oct/2025:13:23:21 +0000] "POST /api/projects HTTP/1.1" 201 895 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:23:30 [INFO]: ::1 - - [12/Oct/2025:13:23:30 +0000] "PUT /api/projects/2d6bf801-6747-48c9-892c-031c33a4df17 HTTP/1.1" 200 569 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:24:02 [INFO]: Get All Projects: Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,website redesign ,Website Updated Now 9 IDs: f79c3f69-544e-4221-ae7b-f20dc50701ce,a0a7772c-001b-47f0-862e-b4e1fc8f0ec5,3c670207-e136-4198-9a17-408ef9572334,e171ea43-1b57-45db-b1e0-c51d97e34e9f,067357e1-ae80-4928-b59d-22bcbd6389b8,3c76579c-29cb-4b38-a485-9a48857f680b,5b844bd2-f8a5-49ef-b989-2a4a1e91ef0e,5f73e7a8-9de3-4a36-9161-469a8f433bdc,2d6bf801-6747-48c9-892c-031c33a4df17
+2025-10-12 16:24:02 [INFO]: ::1 - - [12/Oct/2025:13:24:02 +0000] "GET /api/projects HTTP/1.1" 200 8117 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:24:47 [INFO]: ✅ Project updated successfully: Website Updated Now ID: 2d6bf801-6747-48c9-892c-031c33a4df17 by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:24:47 [INFO]: ::1 - - [12/Oct/2025:13:24:47 +0000] "PUT /api/projects/2d6bf801-6747-48c9-892c-031c33a4df17 HTTP/1.1" 200 569 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:26:02 [INFO]: ✅ Project deleted successfully: ID: 2d6bf801-6747-48c9-892c-031c33a4df17 by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:26:02 [INFO]: ::1 - - [12/Oct/2025:13:26:02 +0000] "DELETE /api/projects/2d6bf801-6747-48c9-892c-031c33a4df17 HTTP/1.1" 200 42 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:37:05 [INFO]: ::1 - - [12/Oct/2025:13:37:05 +0000] "DELETE /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 500 51 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:37:32 [INFO]: ::1 - - [12/Oct/2025:13:37:32 +0000] "DELETE /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 500 51 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:37:57 [INFO]: ::1 - - [12/Oct/2025:13:37:57 +0000] "DELETE /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 500 51 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:38:38 [INFO]: ::1 - - [12/Oct/2025:13:38:38 +0000] "DELETE /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 500 51 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:39:03 [ERROR]: ❌ Error deleting user: 
+Invalid `prisma.user.delete()` invocation:
+
+
+Foreign key constraint violated on the constraint: `Department_createdById_fkey`
+2025-10-12 16:39:03 [INFO]: ::1 - - [12/Oct/2025:13:39:03 +0000] "DELETE /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 500 142 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:39:27 [ERROR]: ❌ Error registering user: User already exists
+2025-10-12 16:39:27 [INFO]: ::1 - - [12/Oct/2025:13:39:27 +0000] "POST /api/auth/register HTTP/1.1" 400 31 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:39:42 [INFO]: ✅ User logged in successfully: admin@example.com
+2025-10-12 16:39:42 [INFO]: ::1 - - [12/Oct/2025:13:39:42 +0000] "POST /api/auth/login HTTP/1.1" 200 256 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:39:56 [INFO]: ✅ User created successfully: Ali manager ID: 24245b56-06d9-4794-b923-0a8d98053239 by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:39:56 [INFO]: ::1 - - [12/Oct/2025:13:39:56 +0000] "POST /api/users HTTP/1.1" 201 269 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:40:12 [INFO]: Get All Users: Test User,Admin User,Ali manager 3 IDs: 873f854b-9560-4363-a4c2-6a2288f0e217,fdf956b6-2ef0-47ea-bbb4-15bdf9d663be,24245b56-06d9-4794-b923-0a8d98053239
+2025-10-12 16:40:12 [INFO]: ::1 - - [12/Oct/2025:13:40:12 +0000] "GET /api/users HTTP/1.1" 200 335 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:40:28 [INFO]: Get User By ID: Admin User ID: fdf956b6-2ef0-47ea-bbb4-15bdf9d663be requested by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:40:28 [INFO]: ::1 - - [12/Oct/2025:13:40:28 +0000] "GET /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 200 108 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:40:43 [INFO]: ✅ User updated successfully: Alice Updated ID: fdf956b6-2ef0-47ea-bbb4-15bdf9d663be by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:40:43 [INFO]: ::1 - - [12/Oct/2025:13:40:43 +0000] "PUT /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 200 173 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:40:54 [ERROR]: ❌ Error deleting user: 
+Invalid `prisma.user.delete()` invocation:
+
+
+Foreign key constraint violated on the constraint: `Department_createdById_fkey`
+2025-10-12 16:40:54 [INFO]: ::1 - - [12/Oct/2025:13:40:54 +0000] "DELETE /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 500 142 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:42:57 [INFO]: Get All Departments: trader Department 1 IDs: 273b8ee4-bdca-4731-86ae-4b1d7ec5327c
+2025-10-12 16:42:57 [INFO]: ::1 - - [12/Oct/2025:13:42:57 +0000] "GET /api/departments HTTP/1.1" 200 3218 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:43:15 [INFO]: ✅ Department updated successfully: IT Deptr Updated ID: 273b8ee4-bdca-4731-86ae-4b1d7ec5327c by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:43:15 [INFO]: ::1 - - [12/Oct/2025:13:43:15 +0000] "PUT /api/departments/273b8ee4-bdca-4731-86ae-4b1d7ec5327c HTTP/1.1" 200 3215 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:43:27 [INFO]: ✅ Department deleted successfully: ID: 273b8ee4-bdca-4731-86ae-4b1d7ec5327c by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:43:27 [INFO]: ::1 - - [12/Oct/2025:13:43:27 +0000] "DELETE /api/departments/273b8ee4-bdca-4731-86ae-4b1d7ec5327c HTTP/1.1" 200 45 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:43:38 [ERROR]: ❌ Error deleting user: 
+Invalid `prisma.user.delete()` invocation:
+
+
+Foreign key constraint violated on the constraint: `Project_createdById_fkey`
+2025-10-12 16:43:38 [INFO]: ::1 - - [12/Oct/2025:13:43:38 +0000] "DELETE /api/users/fdf956b6-2ef0-47ea-bbb4-15bdf9d663be HTTP/1.1" 500 139 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:43:50 [INFO]: Get All Projects: Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,website redesign  8 IDs: f79c3f69-544e-4221-ae7b-f20dc50701ce,a0a7772c-001b-47f0-862e-b4e1fc8f0ec5,3c670207-e136-4198-9a17-408ef9572334,e171ea43-1b57-45db-b1e0-c51d97e34e9f,067357e1-ae80-4928-b59d-22bcbd6389b8,3c76579c-29cb-4b38-a485-9a48857f680b,5b844bd2-f8a5-49ef-b989-2a4a1e91ef0e,5f73e7a8-9de3-4a36-9161-469a8f433bdc
+2025-10-12 16:43:50 [INFO]: ::1 - - [12/Oct/2025:13:43:50 +0000] "GET /api/projects HTTP/1.1" 200 5663 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:44:01 [ERROR]: ❌ Error updating project: 
+Invalid `prisma.project.update()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. No record was found for an update.
+2025-10-12 16:44:01 [INFO]: ::1 - - [12/Oct/2025:13:44:01 +0000] "PUT /api/projects/2d6bf801-6747-48c9-892c-031c33a4df17 HTTP/1.1" 500 213 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:44:50 [ERROR]: ❌ Error updating project: 
+Invalid `prisma.project.update()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. No record was found for an update.
+2025-10-12 16:44:50 [INFO]: ::1 - - [12/Oct/2025:13:44:50 +0000] "PUT /api/projects/2d6bf801-6747-48c9-892c-031c33a4df17 HTTP/1.1" 500 213 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:45:16 [INFO]: Get All Projects: Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,Professional website design ,website redesign  8 IDs: f79c3f69-544e-4221-ae7b-f20dc50701ce,a0a7772c-001b-47f0-862e-b4e1fc8f0ec5,3c670207-e136-4198-9a17-408ef9572334,e171ea43-1b57-45db-b1e0-c51d97e34e9f,067357e1-ae80-4928-b59d-22bcbd6389b8,3c76579c-29cb-4b38-a485-9a48857f680b,5b844bd2-f8a5-49ef-b989-2a4a1e91ef0e,5f73e7a8-9de3-4a36-9161-469a8f433bdc
+2025-10-12 16:45:16 [INFO]: ::1 - - [12/Oct/2025:13:45:16 +0000] "GET /api/projects HTTP/1.1" 200 5663 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:45:38 [INFO]: ✅ Project updated successfully: Website Updated Now ID: f79c3f69-544e-4221-ae7b-f20dc50701ce by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:45:38 [INFO]: ::1 - - [12/Oct/2025:13:45:38 +0000] "PUT /api/projects/f79c3f69-544e-4221-ae7b-f20dc50701ce HTTP/1.1" 200 366 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:45:50 [INFO]: ✅ Project deleted successfully: ID: f79c3f69-544e-4221-ae7b-f20dc50701ce by user fdf956b6-2ef0-47ea-bbb4-15bdf9d663be
+2025-10-12 16:45:50 [INFO]: ::1 - - [12/Oct/2025:13:45:50 +0000] "DELETE /api/projects/f79c3f69-544e-4221-ae7b-f20dc50701ce HTTP/1.1" 200 42 "-" "PostmanRuntime/7.48.0"
+2025-10-12 16:46:17 [ERROR]: ❌ Error creating employee: 
+Invalid `prisma.employee.create()` invocation:
+
+
+Foreign key constraint violated on the constraint: `Employee_departmentId_fkey`
+2025-10-12 16:46:17 [INFO]: ::1 - - [12/Oct/2025:13:46:17 +0000] "POST /api/employees HTTP/1.1" 400 145 "-" "PostmanRuntime/7.48.0"

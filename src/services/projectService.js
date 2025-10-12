@@ -2,14 +2,14 @@ import prisma from "../utils/prismaClient.js";
 
 export const getAllProjects = async () => {
   return await prisma.project.findMany({
-    include: { departments: true, tasks: true },
+    include: { departments: true, tasks: true, createdBy: true },
   });
 };
 
 export const createProject = async (data) => {
   return await prisma.project.create({
     data,
-    include: { departments: true },
+    include: { departments: true, createdBy: true },
   });
 };
 export const updateProject = async (id, data) => {
