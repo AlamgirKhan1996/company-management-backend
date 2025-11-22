@@ -1,7 +1,8 @@
 import prisma from "../utils/prismaClient.js";
 import * as activityService from "../services/activityService.js";
 import logger from "../utils/logger.js";
-import redis from "../config/redisClient.js";
+import { Cache } from "../utils/cache.js";
+import { CacheKeys } from "../utils/cacheKeys.js";
 
 export const uploadFile = async (req, res, next) => {
   try {
@@ -20,7 +21,7 @@ export const uploadFile = async (req, res, next) => {
       },
     });
     logger.info(`✅ File uploaded successfully: ${file.filename} ID: ${file.id} by user ${req.user.id}`);
-    await redis.del("FileCache");
+    await Cache.del(CacheKeys.files.all);
        await activityService.logActivity({
       action: "FILE_UPLOADED",
       entity: "File",
@@ -35,10 +36,11 @@ export const uploadFile = async (req, res, next) => {
       }),
     });
     logger.info(`✅ File uploaded successfully: ${file.filename} ID: ${file.id} by user ${req.user.id}`);
-    await redis.del("FileCache");
+    await Cache.del(CacheKeys.files.all);
     res.status(201).json({ message: "File uploaded successfully", file });
   } catch (err) {
     logger.error(`❌ Error uploading file: ${err.message}`);
+    await Cache.del(CacheKeys.files.all);
     next(err);
   }
 };
@@ -60,8 +62,12 @@ export const getFiles = async (req, res, next) => {
         fileCount: files.length
       })
     });
+    logger.info(`Get Files: ${files.length} files retrieved by user ${req.user.id}`);
+    await Cache.del(CacheKeys.files.all);
     res.json(files);
   } catch (err) {
+    logger.error(`❌ Error getting files: ${err.message}`);
+    await Cache.del(CacheKeys.files.all);
     next(err);
   }
 };

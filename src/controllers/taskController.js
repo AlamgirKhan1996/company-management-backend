@@ -7,7 +7,8 @@ import {
 } from "../services/taskService.js";
 import * as activityService from "../services/activityService.js";
 import logger from "../utils/logger.js";
-import redis from "../config/redisClient.js";
+import { Cache } from "../utils/cache.js";
+import { CacheKeys } from "../utils/cacheKeys.js";
 
 export const createTaskController = async (req, res) => {
   try {
@@ -25,11 +26,11 @@ export const createTaskController = async (req, res) => {
       })
     });
     logger.info(`✅ Task created successfully: ${task.id} by user ${req.user?.id || "unknown"}`);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.status(201).json(task);
   } catch (error) {
     logger.error(`❌ Error creating task: ${error.message}`);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.status(400).json({ error: error.message });
   }
 };
@@ -46,11 +47,11 @@ export const getTasksController = async (req, res) => {
       })
     });
     logger.info(`Get All Tasks: ${tasks.map(task => task.id)} ${tasks.length} IDs: ${tasks.map(task => task.id)}`);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.status(200).json(tasks);
   } catch (error) {
     logger.error(`❌ Error getting all tasks: ${error.message}`);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     console.error("Error fetching tasks:", error);
     res.status(500).json({ error: error.message });
   }
@@ -70,11 +71,11 @@ export const getTaskByIdController = async (req, res) => {
     });
     if (!task) return res.status(404).json({ error: "Task not found" });
     logger.info(`Get Task By ID: ${task.description} ID: ${task.id} requested by user ${req.user.id}`);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.json(task);
   } catch (error) {
     logger.error(`❌ Error getting task by ID: ${error.message}`);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.status(500).json({ error: error.message });
   }
 };
@@ -82,11 +83,11 @@ export const getTaskByIdController = async (req, res) => {
 export const updateTaskController = async (req, res) => {
   try {
     const task = await updateTask(req.params.id, req.body);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.json(task);
   } catch (error) {
     logger.error(`❌ Error updating task: ${error.message}`);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.status(400).json({ error: error.message });
   }
 };
@@ -94,12 +95,12 @@ export const updateTaskController = async (req, res) => {
 export const deleteTaskController = async (req, res) => {
   try {
     await deleteTask(req.params.id);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.json({ message: "Task deleted successfully" });
 
   } catch (error) {
     logger.error(`❌ Error deleting task: ${error.message}`);
-    await redis.del("TaskCache");
+    await Cache.del(CacheKeys.tasks.all);
     res.status(500).json({ error: error.message });
   }
 };

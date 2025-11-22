@@ -1,7 +1,8 @@
 import * as userService from "../services/userService.js";
 import * as activityService from "../services/activityService.js";
 import logger from "../utils/logger.js";
-import redis from "../config/redisClient.js";
+import { Cache } from "../utils/cache.js";
+import { CacheKeys } from "../utils/cacheKeys.js";
 
 // Create User
 export const createUser = async (req, res, next) => {
@@ -25,11 +26,11 @@ export const createUser = async (req, res, next) => {
     //   })
     // });
     logger.info(`✅ User created successfully: ${user.name} ID: ${user.id} by user ${req.user.id}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     res.status(201).json(user);
   } catch (err) {
     logger.error(`❌ Error creating user: ${err.message}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     next(err);
   }
 };
@@ -47,11 +48,11 @@ export const getUsers = async (req, res, next) => {
     //   })
     // });
     logger.info(`Get All Users: ${users.map(user => user.name)} ${users.length} IDs: ${users.map(user => user.id)}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     res.json(users);
   } catch (err) {
     logger.error(`❌ Error getting all users: ${err.message}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     next(err);
   }
 };
@@ -70,12 +71,12 @@ export const getUserById = async (req, res, next) => {
       })
     });
     logger.info(`Get User By ID: ${user.name} ID: ${user.id} requested by user ${req.user.id}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     if (!user) return res.status(404).json({ error: "User not found" });
     res.json(user);
   } catch (err) {
     logger.error(`❌ Error getting user by ID: ${err.message}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     next(err);
   }
 };
@@ -98,7 +99,7 @@ export const updateUser = async (req, res, next) => {
       })
     });
     logger.info(`✅ User updated successfully: ${user.name} ID: ${user.id} by user ${req.user.id}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     res.json({
       success: true,
       message: "User updated successfully",
@@ -106,7 +107,7 @@ export const updateUser = async (req, res, next) => {
     });
   } catch (error) {
     logger.error(`❌ Error updating user: ${error.message}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     next(error);
   }
 };
@@ -123,11 +124,11 @@ export const deleteUser = async (req, res) => {
       })
     });
     logger.info(`✅ User deleted successfully: ID: ${req.params.id} by user ${req.user.id}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     res.json({ message: "User deleted successfully" });
   } catch (error) {
     logger.error(`❌ Error deleting user: ${error.message}`);
-    await redis.del("UserCache");
+    await Cache.del(CacheKeys.users.all);
     res.status(500).json({ error: error.message });
   }
 };
