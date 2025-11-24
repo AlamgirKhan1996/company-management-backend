@@ -1,4 +1,4 @@
-import redis from "../config/redis.js";
+import redis from "../config/redisClient.js";
 
 export const Cache = {
   // GET from cache
