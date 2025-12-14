@@ -1,26 +1,30 @@
 import winston from "winston";
-import path from "path";
-import fs from "fs";
 
-// Ensure logs directory exists
-const logDir = "logs";
-if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+const { combine, timestamp, printf, colorize } = winston.format;
 
-const logFile = path.join(logDir, "app.log");
+const logFormat = printf(({ level, message, timestamp }) => {
+  return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+});
 
-// Winston logger configuration
 const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-    winston.format.printf(
-      (info) => `${info.timestamp} [${info.level.toUpperCase()}]: ${info.message}`
-    )
+  level: process.env.NODE_ENV === "production" ? "info" : "debug",
+  format: combine(
+    timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+    logFormat
   ),
   transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: logFile }),
+    new winston.transports.Console({
+      format:
+        process.env.NODE_ENV === "production"
+          ? combine(timestamp(), logFormat)
+          : combine(colorize(), timestamp(), logFormat),
+    }),
   ],
 });
+
+// for morgan
+logger.stream = {
+  write: (message) => logger.info(message.trim()),
+};
 
 export default logger;

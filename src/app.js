@@ -16,17 +16,27 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js"; // Import file routes
 import logger from "./utils/logger.js";
+import healthRoutes from "./routes/healthRoutes.js";
+
+// Health Check Route
+app.use("/api/health", healthRoutes);
 
 dotenv.config();
 const app = express();
 // Security Middleware
-app.use(helmet()); // Sets secure HTTP headers
+app.use(helmet({ contentSecurityPolicy: false })); // Sets secure HTTP headers
 
 // Optional Professional Touch
 // For production, you can restrict CORS to your frontend domain:
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "https://mycompany.com"
-}));
+
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  })
+);
+
 app.use(express.json());
 
 app.use(morgan("combined", {

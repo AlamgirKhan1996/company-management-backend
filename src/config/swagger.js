@@ -10,8 +10,17 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000/api",
-        description: "Development server",
+        servers: [
+  {
+    url: "http://localhost:5000/api",
+    description: "Local Development",
+  },
+  {
+    url: "https://company-management-backend-2.onrender.com/api",
+    description: "Render Production",
+  },
+],
+
       },
     ],
     components: {

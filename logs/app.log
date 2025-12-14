@@ -1330,3 +1330,20 @@ Foreign key constraint violated on the constraint: `Employee_departmentId_fkey`
 2025-11-24 11:00:35 [ERROR]: ❌ Redis error: connect ENOENT %20--tls%20-u%20redis://default:AWFoAAIncDJjYzg0OGM0ZDE3ZmY0YzIyODAyYzMwZmRlZjVmMDAxZXAyMjQ5MzY@excited-filly-24936.upstash.io:6379
 2025-11-24 11:00:37 [ERROR]: ❌ Redis error: connect ENOENT %20--tls%20-u%20redis://default:AWFoAAIncDJjYzg0OGM0ZDE3ZmY0YzIyODAyYzMwZmRlZjVmMDAxZXAyMjQ5MzY@excited-filly-24936.upstash.io:6379
 2025-11-24 11:00:46 [INFO]: 🟢 Redis (Upstash) connected
+2025-11-24 17:12:47 [INFO]: 🟢 Redis (Upstash) connected
+2025-11-24 17:13:42 [ERROR]: ❌ Error logging in user: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at `postgres:5432`
+
+Please make sure your database server is running at `postgres:5432`.
+2025-11-24 17:13:42 [INFO]: ::1 - - [24/Nov/2025:14:13:42 +0000] "POST /api/auth/login HTTP/1.1" 400 184 "-" "PostmanRuntime/7.49.0"
+2025-11-24 17:14:09 [ERROR]: ❌ Error registering user: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at `postgres:5432`
+
+Please make sure your database server is running at `postgres:5432`.
+2025-11-24 17:14:10 [INFO]: ::1 - - [24/Nov/2025:14:14:10 +0000] "POST /api/auth/register HTTP/1.1" 400 184 "-" "PostmanRuntime/7.49.0"
