@@ -23,6 +23,13 @@ app.use("/api/health", healthRoutes);
 
 dotenv.config();
 const app = express();
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://company-management-frontend.onrender.com", // when deployed
+];
+
 // Security Middleware
 app.use(helmet({ contentSecurityPolicy: false })); // Sets secure HTTP headers
 
@@ -31,9 +38,14 @@ app.use(helmet({ contentSecurityPolicy: false })); // Sets secure HTTP headers
 
 app.use(
   cors({
-    origin: true,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow Postman
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   })
 );
 
