@@ -18,23 +18,12 @@ import fileRoutes from "./routes/fileRoutes.js"; // Import file routes
 import logger from "./utils/logger.js";
 import healthRoutes from "./routes/healthRoutes.js";
 
-// Health Check Route
-app.use("/api/health", healthRoutes);
-
 dotenv.config();
 const app = express();
-
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "https://company-management-frontend.onrender.com", // when deployed
-];
-
+// Health Check Route
 // Security Middleware
 app.use(helmet({ contentSecurityPolicy: false })); // Sets secure HTTP headers
-
-// Optional Professional Touch
-// For production, you can restrict CORS to your frontend domain:
+app.use(express.json());
 
 app.use(
   cors({
@@ -49,7 +38,18 @@ app.use(
   })
 );
 
-app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://company-management-frontend.onrender.com", // when deployed
+];
+
+app.use("/api/health", healthRoutes);
+
+// Optional Professional Touch
+// For production, you can restrict CORS to your frontend domain:
+
+
 
 app.use(morgan("combined", {
   stream:{
