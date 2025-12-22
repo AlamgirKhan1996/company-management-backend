@@ -57,7 +57,7 @@ router.post(
   "/",
   authenticate,
   authorize(["ADMIN", "MANAGER"]),
-  validate(createProjectSchema),logActivity("CREATE_PROJECT", "Project", (req) => `Created project: ${req.body.name}`),
+  validate(createProjectSchema),
   logActivity("CREATE_PROJECT", "Project", (req) => `Created project: ${req.body.name}`),
   createProject, // ✅ controller first
 );
