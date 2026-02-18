@@ -41,7 +41,7 @@ app.use(
 const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-  "https://company-management-backend-production.up.railway.app", // when deployed
+  "company-management-frontend-zeta.vercel.app", // when deployed
 ];
 
 app.use("/api/health", healthRoutes);
