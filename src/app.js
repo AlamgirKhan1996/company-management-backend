@@ -41,7 +41,7 @@ app.use(
 const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-  "https://company-management-frontend.onrender.com", // when deployed
+  "https://company-management-backend-production.up.railway.app/", // when deployed
 ];
 
 app.use("/api/health", healthRoutes);
@@ -52,7 +52,7 @@ app.use("/api/health", healthRoutes);
 
 
 app.use(morgan("combined", {
-  stream:{
+  stream: {
     write: (message) => logger.info(message.trim(),)
   }
 }))
