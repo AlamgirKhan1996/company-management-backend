@@ -37,7 +37,8 @@ export const createTaskController = async (req, res) => {
 
 export const getTasksController = async (req, res) => {
   try {
-    const tasks = await getAllTasks();
+    const { projectId } = req.query;
+    const tasks = await getAllTasks(projectId);
       await activityService.logActivity({
       action: "GET_ALL_TASKS",
       entity: "Task",

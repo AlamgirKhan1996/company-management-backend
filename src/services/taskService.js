@@ -19,12 +19,15 @@ export const createTask = async (data) => {
   });
 };
 
-export const getAllTasks = async () => {
+export const getAllTasks = async (projectId) => {
+  const where = projectId ? { projectId } : {};
   return await prisma.task.findMany({
+    where,
     include: {
       project: true,
       assignedTo: true,
     },
+    orderBy: {createdAt: "desc"},
     });
 };
 
