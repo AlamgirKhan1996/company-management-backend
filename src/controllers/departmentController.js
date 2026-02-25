@@ -25,14 +25,14 @@ export const getDepartments = async (req, res) => {
     
 
     // 1️⃣ Check if data exists in cache
-    // const cached = await Cache.get(CacheKeys.departments.all);
+    const cached = await Cache.get(CacheKeys.departments.all);
     if (cached) {
       logger.info("📦 Department fetched from cache");
       return res.status(200).json(JSON.parse(cached));
     }
 
     const departments = await departmentService.getAllDepartments();
-    // await Cache.set(CacheKeys.departments.all, departments, 300); // Cache for 5 minutes
+    await Cache.set(CacheKeys.departments.all, departments, 300); // Cache for 5 minutes
     logger.info("🧠 Fresh data fetched and cached");
     logger.info(`Get All Departments: ${departments.map(dept => dept.name)} ${departments.length} IDs: ${departments.map(dept => dept.id)}`);
     res.json(departments);
