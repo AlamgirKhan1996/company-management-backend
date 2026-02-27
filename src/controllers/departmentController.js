@@ -32,7 +32,7 @@ export const getDepartments = async (req, res) => {
     }
 
     const departments = await departmentService.getAllDepartments();
-    await Cache.set(CacheKeys.departments.all, departments, 300); // Cache for 5 minutes
+    await Cache.set(CacheKeys.departments.all, JSON.stringify(departments), 300); // Cache for 5 minutes
     logger.info("🧠 Fresh data fetched and cached");
     logger.info(`Get All Departments: ${departments.map(dept => dept.name)} ${departments.length} IDs: ${departments.map(dept => dept.id)}`);
     res.json(departments);
