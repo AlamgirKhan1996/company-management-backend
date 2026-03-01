@@ -1,3 +1,4 @@
+import { use } from "react";
 import prisma from "../utils/prismaClient.js";
 
 export const getAllProjects = async () => {
@@ -6,9 +7,12 @@ export const getAllProjects = async () => {
   });
 };
 
-export const createProject = async (data) => {
+export const createProject = async (data, userId) => {
   return await prisma.project.create({
-    data,
+    data : {
+      ...data,
+      createdById: userId,
+    },
     include: { departments: true, createdBy: true },
   });
 };
