@@ -19,11 +19,11 @@ model User {
 
   departments        Department[]  @relation("UserDepartments")
   projects           Project[]     @relation("UserProjects")
-  tasks              Task[]        @relation("UserTasks")
   activityLogs       ActivityLog[] @relation("performedByUser")
   employeeOf         Department[]  @relation("DepartmentEmployees") // departments where user is employee
   activityLogsAsUser ActivityLog[] @relation(fields: [], references: [])
   File               File[]
+  tasks              Task[]
 
   @@index([email])
 }
@@ -76,12 +76,12 @@ model Task {
   project   Project @relation(fields: [projectId], references: [id])
   projectId String
 
-  assignedTo   User?         @relation("UserTasks", fields: [assignedToId], references: [id])
-  assignedToId String?
   activityLogs ActivityLog[]
 
   employee   Employee? @relation("EmployeeTasks", fields: [employeeId], references: [id])
   employeeId String?
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     String?
 
   @@index([status])
   @@index([dueDate])
