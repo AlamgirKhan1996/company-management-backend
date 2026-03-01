@@ -12,8 +12,8 @@ export const createTask = async (data) => {
       description,
       status,
       dueDate: new Date(dueDate),
-      project: { connect: { id: projectId } },
-      assignedTo: { connect: { id: assignedToId } },
+      projectId,
+      employeeId: assignedToId
     },
     include: { project: true, assignedTo: true },
   });
