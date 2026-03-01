@@ -1,4 +1,3 @@
-import { use } from "react";
 import prisma from "../utils/prismaClient.js";
 
 export const getAllProjects = async () => {
