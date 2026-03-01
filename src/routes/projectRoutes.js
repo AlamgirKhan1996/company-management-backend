@@ -54,7 +54,7 @@ const router = express.Router();
 
 // Create Project with Activity Logging
 router.post(
-  "/",
+  "/projects",
   authenticate,
   authorize(["ADMIN", "MANAGER"]),
   validate(createProjectSchema),

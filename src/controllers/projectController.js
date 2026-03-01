@@ -3,6 +3,7 @@ import * as activityService from "../services/activityService.js";
 import { Cache } from "../utils/cache.js";
 import { CacheKeys } from "../utils/cacheKeys.js";
 import logger from "../utils/logger.js";
+import { use } from "react";
 
 // Create Project
 export const createProject = async (req, res, next) => {
@@ -24,6 +25,7 @@ export const createProject = async (req, res, next) => {
       startDate: new Date(startDate),
       endDate: endDate ? new Date(endDate) : null,
       status,
+      userId,
       createdBy: { connect: { id: String(userId) } },
       departments: { connect: departmentIds.length ? departmentIds.map(id => ({ id: String(id) })) : [] },
     });

@@ -21,8 +21,9 @@ export const updateProject = async (id, data) => {
     where: { id },
     data: {
       ...data,
-      endDate: data.endDate? new Date(data.endDate) : undefined,
-      startDate: data.startDate? new Date(data.startDate) : undefined,
+      startDate: new Date(data.startDate),
+      endDate: data.endDate? new Date(data.endDate) : null,
+      createdById: data.createdById,
     },
     include: { departments: true },
   });
