@@ -11,11 +11,11 @@ export const createTask = async (data) => {
       title,
       description,
       status,
-      dueDate: new Date(dueDate),
-      projectId,
-      employeeId: assignedToId
+      dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+      project: { connect: { id: projectId } },
+      employee: { connect: { id: assignedToId } }
     },
-    include: { project: true, assignedTo: true },
+    include: { project: true, employee: true },
   });
 };
 
@@ -25,7 +25,7 @@ export const getAllTasks = async (projectId) => {
     where,
     include: {
       project: true,
-      assignedTo: true,
+      employee: true,
     },
     orderBy: {createdAt: "desc"},
     });
