@@ -6,7 +6,7 @@ export const createProjectSchema = z.object({
   description: z.string().optional(),
   startDate: z.string(), // Expect date string, can parse later
   endDate: z.string().optional(),
-  status: z.enum(["PLANED", "ACTIVE", "COMPLETED", "ON_HOLD"]).default("PLANED"),
+  status: z.enum(["PLANNED", "IN_PROGRESS", "COMPLETED", "ON_HOLD"]).default("PLANNED"),
   departmentIds: z.array(z.string().uuid().optional()).default([]),
   userId: z.string().uuid(),
 });
@@ -16,7 +16,7 @@ export const updateProjectSchema = z.object({
   description: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
-  status: z.enum(["PLANED", "ACTIVE", "COMPLETED", "ON_HOLD"]).optional(),
+  status: z.enum(["PLANNED", "IN_PROGRESS", "COMPLETED", "ON_HOLD"]).optional(),
   departmentIds: z.array(z.string().uuid()).optional(),
 });
 export const assignProjectSchema = z.object({
