@@ -6,10 +6,23 @@ export const getAllProjects = async () => {
   });
 };
 
-export const createProject = async (data, userId) => {
+export const createProject = async ({
+  name,
+  description,
+  startDate,
+  endDate,
+  status,
+  departmentIds,
+  userId,
+}) => {
   return await prisma.project.create({
     data : {
-      ...data,
+      name,
+      description,
+      startDate: new Date(startDate),
+      endDate: endDate ? new Date(endDate) : null,
+      status,
+      departments: { connect: departmentIds.length ? departmentIds.map(id => ({ id: String(id) })) : [] },
       createdBy: { connect: { id: userId } },
     },
     include: { departments: true, createdBy: true },

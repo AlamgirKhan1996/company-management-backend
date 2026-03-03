@@ -7,15 +7,16 @@ import logger from "../utils/logger.js";
 // Create Project
 export const createProject = async (req, res, next) => {
   try {
-    let { name, description, startDate, endDate, status, departmentIds = [], userId } = req.body;
+    const { name, description, startDate, endDate, status, departmentIds = [] } = req.body;
+    const userId = req.user.id;
 
-    if (!Array.isArray(departmentIds)) {
-      if (departmentIds) {
-        departmentIds = [departmentIds]; // convert single value to array
-      } else {
-        departmentIds = []; // default empty
-      }
-    }
+    // if (!Array.isArray(departmentIds)) {
+    //   if (departmentIds) {
+    //     departmentIds = [departmentIds]; // convert single value to array
+    //   } else {
+    //     departmentIds = []; // default empty
+    //   }
+    // }
 
     // Create the project
     const project = await projectsService.createProject({
@@ -24,8 +25,8 @@ export const createProject = async (req, res, next) => {
       startDate: new Date(startDate),
       endDate: endDate ? new Date(endDate) : null,
       status,
-      createdBy: { connect: { id: (userId) } },
-      departments: { connect: departmentIds.length ? departmentIds.map(id => ({ id: String(id) })) : [] },
+      userId,
+      departmentIds,
     });
     logger.info(`✅ Project created successfully: ${project.name} ID: ${project.id} by user${userId} department ${departmentIds}`);
     await Cache.del(CacheKeys.projects.all);
