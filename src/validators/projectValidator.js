@@ -8,7 +8,6 @@ export const createProjectSchema = z.object({
   endDate: z.string().optional(),
   status: z.enum(["PLANNED", "IN_PROGRESS", "COMPLETED", "ON_HOLD"]).default("PLANNED"),
   departmentIds: z.array(z.string().uuid().optional()).default([]),
-  userId: z.string().uuid(),
 });
 
 export const updateProjectSchema = z.object({

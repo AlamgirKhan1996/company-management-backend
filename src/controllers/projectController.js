@@ -24,8 +24,7 @@ export const createProject = async (req, res, next) => {
       startDate: new Date(startDate),
       endDate: endDate ? new Date(endDate) : null,
       status,
-      userId,
-      createdBy: { connect: { id: String(userId) } },
+      createdBy: { connect: { id: (userId) } },
       departments: { connect: departmentIds.length ? departmentIds.map(id => ({ id: String(id) })) : [] },
     });
     logger.info(`✅ Project created successfully: ${project.name} ID: ${project.id} by user${userId} department ${departmentIds}`);
