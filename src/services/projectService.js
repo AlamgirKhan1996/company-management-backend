@@ -10,7 +10,7 @@ export const createProject = async (data, userId) => {
   return await prisma.project.create({
     data : {
       ...data,
-      createdById: userId,
+      createdBy: { connect: { id: userId } },
     },
     include: { departments: true, createdBy: true },
   });

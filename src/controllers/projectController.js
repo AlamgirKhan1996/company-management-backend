@@ -7,7 +7,7 @@ import logger from "../utils/logger.js";
 // Create Project
 export const createProject = async (req, res, next) => {
   try {
-    let { name, description, startDate, endDate, status, departmentIds = [], userId } = req.body;
+    let { name, description, startDate, endDate, status, departmentIds = [], } = req.body;
 
     if (!Array.isArray(departmentIds)) {
       if (departmentIds) {
