@@ -43,7 +43,7 @@ export const updateTask = async (id, data) => {
   return await prisma.task.update({
     where: { id },
     data,
-    include: { project: true, assignedTo: true },
+    include: { project: true},
   });
 };
 
