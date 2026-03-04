@@ -88,7 +88,6 @@ export const updateTaskController = async (req, res) => {
       action: "TASK_UPDATED",
       entity: "Task",
       entityId: req.params.id,
-      userId: req.user.id
     });
     await Cache.del(CacheKeys.tasks.all);
     res.json(task);
