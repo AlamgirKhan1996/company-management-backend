@@ -84,6 +84,12 @@ export const getTaskByIdController = async (req, res) => {
 export const updateTaskController = async (req, res) => {
   try {
     const task = await updateTask(req.params.id, req.body);
+    await activityService.logActivity({
+      action: "TASK_UPDATED",
+      entity: "Task",
+      entityId: req.params.id,
+      userId: req.user.id
+    });
     await Cache.del(CacheKeys.tasks.all);
     res.json(task);
   } catch (error) {

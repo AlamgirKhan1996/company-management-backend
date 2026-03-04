@@ -1,3 +1,4 @@
+import { success } from "zod";
 import prisma from "../utils/prismaClient.js";
 export const createTask = async (data) => {
   const { title, description, status, dueDate, projectId, assignedToId } = data;
@@ -43,7 +44,7 @@ export const updateTask = async (id, data) => {
   return await prisma.task.update({
     where: { id },
     data,
-    include: { project: true},
+    include: { project: true, employee: true },
   });
 };
 
