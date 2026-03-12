@@ -9,7 +9,8 @@ const ACTIVITY_LOG_CACHE_KEY = CacheKeys.activity.logs;
 
 export const getActivityLogs = async (req, res, next) => {
   try {
-    const logs = await activityService.getActivityLogs();
+    const companyId = req.companyId || req.user.companyId;
+    const logs = await activityService.getActivityLogs(companyId);
     logger.info(`Get Activity Logs: ${logs.length} logs retrieved`);
    await Cache.del(ACTIVITY_LOG_CACHE_KEY);
     res.status(200).json(logs);

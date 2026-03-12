@@ -1,37 +1,49 @@
 import prisma from "../utils/prismaClient.js";
 
-export const getAllEmployees = async () => {
+export const getAllEmployees = async (companyId) => {
   return await prisma.employee.findMany({
+    where: { companyId },
     include: { department: true, tasks: true },
   });
 };
 
-export const createEmployee = async (data) => {
+export const createEmployee = async (data, companyId) => {
   return await prisma.employee.create({
-    data,
+    data: {
+      ...data,
+      companyId,
+    },
     include: { department: true },
   });
 };
 
-export const getEmployeeByEmail = async (email) => {
-  return await prisma.employee.findUnique({ where: { email } });
+export const getEmployeeByEmail = async (email, companyId) => {
+  return await prisma.employee.findFirst({
+    where: { email, companyId },
+  });
 };
 
-export const getEmployeeById = async (id) => {
-  return await prisma.employee.findUnique({
-    where: { id },
+export const getEmployeeById = async (id, companyId) => {
+  return await prisma.employee.findFirst({
+    where: { id, companyId },
     include: { department: true, tasks: true },
   });
 };
 
-export const updateEmployee = async (id, data) => {
+export const updateEmployee = async (id, data, companyId) => {
   return await prisma.employee.update({
     where: { id },
+    data: {
+      ...data,
+      companyId,
+    },
     data,
     include: { department: true, tasks: true },
   });
 };
 
-export const deleteEmployee = async (id) => {
-  return await prisma.employee.delete({ where: { id } });
+export const deleteEmployee = async (id, companyId) => {
+  return await prisma.employee.deleteMany({
+    where: { id, companyId },
+  });
 };

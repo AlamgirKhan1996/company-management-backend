@@ -2,8 +2,9 @@ import { id } from "zod/locales";
 import prisma from "../utils/prismaClient.js";
 
 // Get all departments
-export const getAllDepartments = async () => {
+export const getAllDepartments = async (companyId) => {
   return await prisma.department.findMany({
+    where: { companyId },
     include: {
       createdBy: {
         select: { id: true, name: true, email: true, role: true },
@@ -16,11 +17,13 @@ export const getAllDepartments = async () => {
 };
 
 // Create department
-export const createDepartment = async (name, createdById) => {
+export const createDepartment = async (name, createdById, companyId) => {
   return await prisma.department.create({
     data: {
       name,
       createdBy: { connect: { id: createdById } },
+      company: { connect: { id: companyId } },
+      companyId,
     },
     include: {
       createdBy: {
@@ -31,11 +34,11 @@ export const createDepartment = async (name, createdById) => {
     },
   });
 };
-export const updateDepartment = async (id, name) => {
+export const updateDepartment = async (id, name, companyId) => {
 
   return await prisma.department.update({
     where: { id },
-    data: { name },
+    data: { name, companyId },
     include: {
       createdBy: {
         select: { id: true, name: true, email: true, role: true },
@@ -45,6 +48,8 @@ export const updateDepartment = async (id, name) => {
     },
   });
 };
-export const deleteDepartment = async (id) => {
-  return await prisma.department.delete({ where: { id } });
+export const deleteDepartment = async (id, companyId) => {
+  return await prisma.department.deleteMany({
+    where: { id, companyId },
+  });
 };

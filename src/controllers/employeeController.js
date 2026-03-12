@@ -12,7 +12,8 @@ import { CacheKeys } from "../utils/cacheKeys.js";
 
 export const createEmployeeController = async (req, res) => {
   try {
-    const employee = await createEmployee(req.body);
+    const companyId = req.companyId || req.user.companyId;
+    const employee = await createEmployee(req.body, companyId);
     logger.info(`✅ Employee created successfully: ${employee.name} ID: ${employee.id} by user ${req.user.id}`);
     await Cache.del(CacheKeys.employees.all);
     res.status(201).json({ message: "Employee created", employee });
@@ -25,7 +26,8 @@ export const createEmployeeController = async (req, res) => {
 
 export const getEmployeesController = async (req, res) => {
   try {
-    const employees = await getAllEmployees();
+    const companyId = req.companyId || req.user.companyId;
+    const employees = await getAllEmployees(companyId);
     logger.info(`Get All Employees: ${employees.map(emp => emp.name)} ${employees.length} IDs: ${employees.map(emp => emp.id)}`);
     await Cache.del(CacheKeys.employees.all);
     res.json(employees);
@@ -38,7 +40,8 @@ export const getEmployeesController = async (req, res) => {
 
 export const getEmployeeByIdController = async (req, res) => {
   try {
-    const employee = await getEmployeeById(req.params.id);
+    const companyId = req.companyId || req.user.companyId;
+    const employee = await getEmployeeById(req.params.id, companyId);
     await activityService.logActivity({
       action: "GET_EMPLOYEE_BY_ID",
       entity: "Employee",

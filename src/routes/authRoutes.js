@@ -1,7 +1,7 @@
 import express from "express";
-import { registerUser, loginUser } from "../controllers/authController.js";
+import { registerUser, loginUser, registerCompany } from "../controllers/authController.js";
 import { validate } from "../middleware/validateRequest.js";
-import { registerSchema, loginSchema } from "../validators/authValidator.js";
+import { registerSchema, loginSchema, registerCompanySchema } from "../validators/authValidator.js";
 import { logActivity } from "../middleware/activityLogger.js";
 const router = express.Router();
 
@@ -55,5 +55,15 @@ const router = express.Router();
 
 router.post("/register", validate(registerSchema), logActivity("REGISTER_USER", "User", (req) => `Registered user: ${req.body.email}`), registerUser);
 router.post("/login", validate(loginSchema), logActivity("LOGIN_USER", "User", (req) => `Logged in user: ${req.body.email}`), loginUser);
+router.post(
+  "/register-company",
+  validate(registerCompanySchema),
+  logActivity(
+    "REGISTER_COMPANY",
+    "Company",
+    (req) => `Registered company: ${req.body.companyEmail} with admin: ${req.body.adminEmail}`
+  ),
+  registerCompany
+);
 
 export default router;

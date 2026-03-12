@@ -9,6 +9,7 @@ export const createProject = async (req, res, next) => {
   try {
     const { name, description, startDate, endDate, status, departmentIds = [] } = req.body;
     const userId = req.user.id;
+    const companyId = req.companyId || req.user.companyId;
 
     // if (!Array.isArray(departmentIds)) {
     //   if (departmentIds) {
@@ -27,6 +28,7 @@ export const createProject = async (req, res, next) => {
       status,
       userId,
       departmentIds,
+      companyId,
     });
     logger.info(`✅ Project created successfully: ${project.name} ID: ${project.id} by user${userId} department ${departmentIds}`);
     await Cache.del(CacheKeys.projects.all);
@@ -41,7 +43,8 @@ export const createProject = async (req, res, next) => {
 // Get all projects
 export const getProjects = async (req, res, next) => {
   try {
-    const projects = await projectsService.getAllProjects();
+    const companyId = req.companyId || req.user.companyId;
+    const projects = await projectsService.getAllProjects(companyId);
     logger.info(`Get All Projects: ${projects.map(project => project.name)} ${projects.length} IDs: ${projects.map(project => project.id)}`);
     await Cache.del(CacheKeys.projects.all);
     res.json(projects);

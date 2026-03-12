@@ -12,7 +12,8 @@ import { CacheKeys } from "../utils/cacheKeys.js";
 
 export const createTaskController = async (req, res) => {
   try {
-    const task = await createTask(req.body);
+    const companyId = req.companyId || req.user.companyId;
+    const task = await createTask(req.body, companyId);
     await activityService.logActivity({
       action: "TASK_CREATED",
       entity: "Task",
@@ -38,7 +39,8 @@ export const createTaskController = async (req, res) => {
 export const getTasksController = async (req, res) => {
   try {
     const { projectId } = req.query;
-    const tasks = await getAllTasks(projectId);
+    const companyId = req.companyId || req.user.companyId;
+    const tasks = await getAllTasks(projectId, companyId);
       await activityService.logActivity({
       action: "GET_ALL_TASKS",
       entity: "Task",
@@ -60,7 +62,8 @@ export const getTasksController = async (req, res) => {
 
 export const getTaskByIdController = async (req, res) => {
   try {
-    const task = await getTaskById(req.params.id);
+    const companyId = req.companyId || req.user.companyId;
+    const task = await getTaskById(req.params.id, companyId);
       await activityService.logActivity({
       action: "GET_TASK_BY_ID",
       entity: "Task",
@@ -83,7 +86,8 @@ export const getTaskByIdController = async (req, res) => {
 
 export const updateTaskController = async (req, res) => {
   try {
-    const task = await updateTask(req.params.id, req.body);
+    const companyId = req.companyId || req.user.companyId;
+    const task = await updateTask(req.params.id, { ...req.body, companyId });
     await activityService.logActivity({
       action: "TASK_UPDATED",
       entity: "Task",
@@ -100,7 +104,8 @@ export const updateTaskController = async (req, res) => {
 
 export const deleteTaskController = async (req, res) => {
   try {
-    await deleteTask(req.params.id);
+    const companyId = req.companyId || req.user.companyId;
+    await deleteTask(req.params.id, companyId);
     await Cache.del(CacheKeys.tasks.all);
     res.json({ message: "Task deleted successfully" });
 

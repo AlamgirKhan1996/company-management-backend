@@ -1,10 +1,19 @@
 import { success } from "zod";
 import prisma from "../utils/prismaClient.js";
-export const createTask = async (data) => {
+export const createTask = async (data, companyId) => {
   const { title, description, status, dueDate, projectId, assignedToId } = data;
 
   if (!projectId || !assignedToId) {
     throw new Error("projectId and assignedToId are required");
+  }
+
+  const [project, employee] = await Promise.all([
+    prisma.project.findFirst({ where: { id: projectId, companyId } }),
+    prisma.employee.findFirst({ where: { id: assignedToId, companyId } }),
+  ]);
+
+  if (!project || !employee) {
+    throw new Error("Project or employee does not belong to your company");
   }
 
   return await prisma.task.create({
@@ -14,14 +23,16 @@ export const createTask = async (data) => {
       status,
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
       project: { connect: { id: projectId } },
-      employee: { connect: { id: assignedToId } }
+      employee: { connect: { id: assignedToId } },
+      company: { connect: { id: companyId } },
+      companyId,
     },
     include: { project: true, employee: true },
   });
 };
 
-export const getAllTasks = async (projectId) => {
-  const where = projectId ? { projectId } : {};
+export const getAllTasks = async (projectId, companyId) => {
+  const where = projectId ? { projectId, companyId } : { companyId };
   return await prisma.task.findMany({
     where,
     include: {
@@ -33,10 +44,10 @@ export const getAllTasks = async (projectId) => {
 };
 
 
-export const getTaskById = async (id) => {
-  return await prisma.task.findUnique({
-    where: { id },
-    include: { project: true, assignedTo: true },
+export const getTaskById = async (id, companyId) => {
+  return await prisma.task.findFirst({
+    where: { id, companyId },
+    include: { project: true, employee: true },
   });
 };
 
@@ -48,6 +59,8 @@ export const updateTask = async (id, data) => {
   });
 };
 
-export const deleteTask = async (id) => {
-  return await prisma.task.delete({ where: { id } });
+export const deleteTask = async (id, companyId) => {
+  return await prisma.task.deleteMany({
+    where: { id, companyId },
+  });
 };

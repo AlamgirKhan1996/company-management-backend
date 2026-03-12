@@ -1,4 +1,8 @@
-import { registerUserService, loginUserService } from "../services/authService.js";
+import {
+  registerUserService,
+  loginUserService,
+  registerCompanyService,
+} from "../services/authService.js";
 import logger from "../utils/logger.js";
 import { Cache } from "../utils/cache.js";
 import { CacheKeys } from "../utils/cacheKeys.js";
@@ -28,6 +32,42 @@ export const loginUser = async (req, res) => {
   } catch (err) {
     logger.error(`❌ Error logging in user: ${err.message}`);
     await Cache.del(CacheKeys.users.all);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// Register Company + Super Admin
+export const registerCompany = async (req, res) => {
+  try {
+    const {
+      companyName,
+      companyEmail,
+      phone,
+      address,
+      adminName,
+      adminEmail,
+      password,
+    } = req.body;
+
+    const { company, user, token } = await registerCompanyService({
+      companyName,
+      companyEmail,
+      phone,
+      address,
+      adminName,
+      adminEmail,
+      password,
+    });
+
+    logger.info(`✅ Company registered successfully: ${company.id}, admin user: ${user.id}`);
+    res.status(201).json({
+      message: "Company registered",
+      companyId: company.id,
+      userId: user.id,
+      token,
+    });
+  } catch (err) {
+    logger.error(`❌ Error registering company: ${err.message}`);
     res.status(400).json({ error: err.message });
   }
 };

@@ -1,7 +1,8 @@
 import prisma from "../utils/prismaClient.js";
 
-export const getAllProjects = async () => {
+export const getAllProjects = async (companyId) => {
   return await prisma.project.findMany({
+    where: { companyId },
     include: { departments: true, tasks: true, createdBy: true },
   });
 };
@@ -14,15 +15,36 @@ export const createProject = async ({
   status,
   departmentIds,
   userId,
+  companyId,
 }) => {
+  if (departmentIds && departmentIds.length) {
+    const validDepartments = await prisma.department.findMany({
+      where: {
+        id: { in: departmentIds.map((id) => String(id)) },
+        companyId,
+      },
+      select: { id: true },
+    });
+
+    if (validDepartments.length !== departmentIds.length) {
+      throw new Error("One or more departments do not belong to your company");
+    }
+  }
+
   return await prisma.project.create({
-    data : {
+    data: {
       name,
       description,
       startDate: new Date(startDate),
       endDate: endDate ? new Date(endDate) : null,
       status,
-      departments: { connect: departmentIds.length ? departmentIds.map(id => ({ id: String(id) })) : [] },
+      company: { connect: { id: companyId } },
+      companyId,
+      departments: {
+        connect: departmentIds.length
+          ? departmentIds.map((id) => ({ id: String(id) }))
+          : [],
+      },
       createdBy: { connect: { id: userId } },
     },
     include: { departments: true, createdBy: true },

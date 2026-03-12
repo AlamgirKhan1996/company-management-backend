@@ -28,10 +28,77 @@ export const loginUserService = async (email, password) => {
   if (!valid) throw new Error("Invalid password");
 
   const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
+    {
+      id: user.id,
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+      companyId: user.companyId,
+    },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
 
   return { token };
+};
+
+export const registerCompanyService = async ({
+  companyName,
+  companyEmail,
+  phone,
+  address,
+  adminName,
+  adminEmail,
+  password,
+}) => {
+  return await prisma.$transaction(async (tx) => {
+    const existingCompany = await tx.company.findUnique({
+      where: { email: companyEmail },
+    });
+    if (existingCompany) {
+      throw new Error("Company already exists with this email");
+    }
+
+    const existingAdmin = await tx.user.findFirst({
+      where: { email: adminEmail },
+    });
+    if (existingAdmin) {
+      throw new Error("User already exists with this email");
+    }
+
+    const company = await tx.company.create({
+      data: {
+        name: companyName,
+        email: companyEmail,
+        phone,
+        address,
+      },
+    });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await tx.user.create({
+      data: {
+        name: adminName,
+        email: adminEmail,
+        password: hashedPassword,
+        role: "SUPER_ADMIN",
+        company: { connect: { id: company.id } },
+      },
+    });
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+        companyId: company.id,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    return { company, user, token };
+  });
 };
