@@ -24,8 +24,8 @@ export const registerUser = async (req, res) => {
 // Login User
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const { token } = await loginUserService(email, password);
+    const { email, password, companyId, companyEmail } = req.body;
+    const { token } = await loginUserService({ email, password, companyId, companyEmail });
     logger.info(`✅ User logged in successfully: ${email}`);
     await Cache.del(CacheKeys.users.all);
     res.json({ token });

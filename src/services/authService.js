@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken";
 
 export const registerUserService = async (name, email, password, role) => {
   // Check if user already exists
-  const existingUser = await prisma.user.findUnique({ where: { email } });
+  // NOTE: In multi-tenant mode, email is not globally unique.
+  const existingUser = await prisma.user.findFirst({ where: { email } });
   if (existingUser) {
     throw new Error("User already exists");
   }
@@ -20,8 +21,42 @@ export const registerUserService = async (name, email, password, role) => {
   return user;
 };
 
-export const loginUserService = async (email, password) => {
-  const user = await prisma.user.findUnique({ where: { email } });
+export const loginUserService = async ({
+  email,
+  password,
+  companyId,
+  companyEmail,
+}) => {
+  let resolvedCompanyId = companyId;
+
+  if (!resolvedCompanyId && companyEmail) {
+    const company = await prisma.company.findUnique({
+      where: { email: companyEmail },
+      select: { id: true },
+    });
+    if (!company) throw new Error("Company not found");
+    resolvedCompanyId = company.id;
+  }
+
+  let user = null;
+  if (resolvedCompanyId) {
+    user = await prisma.user.findFirst({
+      where: { email, companyId: resolvedCompanyId },
+    });
+  } else {
+    const matches = await prisma.user.findMany({
+      where: { email },
+      select: { id: true, email: true, password: true, role: true, companyId: true },
+      take: 2,
+    });
+
+    if (matches.length === 0) throw new Error("User not found");
+    if (matches.length > 1) {
+      throw new Error("Multiple companies found for this email. Please provide companyEmail or companyId.");
+    }
+    user = matches[0];
+  }
+
   if (!user) throw new Error("User not found");
 
   const valid = await bcrypt.compare(password, user.password);
