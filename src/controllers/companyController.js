@@ -45,3 +45,37 @@ export const getCompanyById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+export const updateCompany = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { companyName, companyEmail } = req.body;
+        const company = await createCompanyService.getCompanyById(id);
+        if (!company) {
+            return res.status(404).json({ error: "Company not found" });
+        }
+        const updatedCompany = await createCompanyService.updateCompany(id, companyName, companyEmail);
+        await Cache.del(CacheKeys.companies.all);
+        res.status(200).json({ company: updatedCompany });
+    } catch (err) {
+        logger.error(`❌ Error updating company: ${err.message}`);
+        res.status(400).json({ error: err.message });
+    }
+};
+
+export const deleteCompany = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const company = await createCompanyService.getCompanyById(id);
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+    await createCompanyService.deleteCompany(id);
+    await Cache.del(CacheKeys.companies.all);
+    res.status(200).json({ message: "Company deleted successfully" });
+  } catch (err) {
+    logger.error(`❌ Error deleting company: ${err.message}`);
+    res.status(500).json({ error: err.message });
+  }
+};
+
