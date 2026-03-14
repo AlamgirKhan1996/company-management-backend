@@ -71,3 +71,19 @@ export const registerCompany = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+export const getMe = async (req, res, next) => {
+  try {
+    // Example with Prisma
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { id: true, name: true, email: true, role: true, companyId: true }
+    });
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};

@@ -3,6 +3,8 @@ import { registerUser, loginUser, registerCompany } from "../controllers/authCon
 import { validate } from "../middleware/validateRequest.js";
 import { registerSchema, loginSchema, registerCompanySchema } from "../validators/authValidator.js";
 import { logActivity } from "../middleware/activityLogger.js";
+import { authenticate } from "../middleware/authMiddleware.js";
+import { getMe } from "../controllers/authController.js";
 const router = express.Router();
 
 /**
@@ -65,5 +67,8 @@ router.post(
   ),
   registerCompany
 );
+
+router.get("/me", authenticate, logActivity("GET_ME", "User", (req) => `Fetched current user: ${req.user.email}`), getMe);
+
 
 export default router;
