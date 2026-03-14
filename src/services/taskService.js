@@ -1,4 +1,3 @@
-import { success } from "zod";
 import prisma from "../utils/prismaClient.js";
 export const createTask = async (data, companyId) => {
   const { title, description, status, dueDate, projectId, assignedToId } = data;
@@ -34,11 +33,7 @@ export const createTask = async (data, companyId) => {
 export const getAllTasks = async (projectId, companyId) => {
   const where = projectId ? { projectId, companyId } : { companyId };
   return await prisma.task.findMany({
-    where,
-    include: {
-      project: true,
-      employee: true,
-    },
+    where: {companyId: req.user.companyId},
     orderBy: {createdAt: "desc"},
     });
 };

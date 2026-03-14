@@ -68,7 +68,7 @@ router.post(
   registerCompany
 );
 
-router.get("/me", authenticate, logActivity("GET_ME", "User", (req) => `Fetched current user: ${req.user.email}`), getMe);
+router.get("/me", authenticate, logActivity("GET_ME", "User", (req) => `Fetched current user: ${req.user?.email}`), getMe);
 
 
 export default router;

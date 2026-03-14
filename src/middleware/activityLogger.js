@@ -21,10 +21,9 @@ export const logActivity = (action, entityType, getDetails) => {
             action,
             entity: entityType,
             entityId: req.params.id || null,
-            performedById,
+            performedById: req.user ? req.user.id : null,
             details,
-            userId: req.user.id, // user who performed the action
-            companyId: req.user.companyId,
+            companyId: req.user?.companyId || null,
           },
         });
       } catch (err) {
