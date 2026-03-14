@@ -1,4 +1,8 @@
-import prisma from "../utils/prismaClient";
+import prisma from "../utils/prismaClient.js";
+
+// Get company by ID
+
+
 export const createCompany = async (name, email, createdById) => {
   return await prisma.company.create({
     data: {
