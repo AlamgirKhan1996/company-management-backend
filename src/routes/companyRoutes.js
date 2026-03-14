@@ -12,3 +12,5 @@ router.get("/", authenticate, authorize(["ADMIN"]), logActivity("GET_ALL_COMPANI
 router.get("/:id", authenticate, authorize(["ADMIN"]), logActivity("GET_COMPANY", "Company", (req) => `Fetched company: ${req.params.id}`), getCompanyById);
 router.put("/:id", authenticate, authorize(["ADMIN"]), validate(updateCompanySchema), logActivity("UPDATE_COMPANY", "Company", (req) => `Updated company: ${req.body.name}`), updateCompany);
 router.delete("/:id", authenticate, authorize(["ADMIN"]), logActivity("DELETE_COMPANY", "Company", (req) => `Deleted company: ${req.params.id}`), deleteCompany);
+
+export default router;
