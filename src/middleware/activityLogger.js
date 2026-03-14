@@ -23,7 +23,8 @@ export const logActivity = (action, entityType, getDetails) => {
             entityId: req.params.id || null,
             performedById,
             details,
-            companyId,
+            userId: req.user.id, // user who performed the action
+            companyId: req.user.companyId,
           },
         });
       } catch (err) {
