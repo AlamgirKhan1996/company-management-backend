@@ -133,7 +133,6 @@ export const registerCompanyService = async ({
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
-
     return { company, user, token };
   });
 };
