@@ -61,7 +61,11 @@ router.post(
   logActivity("CREATE_TASK", "Task", (req) => `Created task: ${req.body.name}`),
   createTaskController
 );
-router.get("/", authenticate, logActivity("GET_ALL_TASKS", "Task"), getTasksController);
+router.get("/", authenticate, getTasksController,
+logActivity("GET_ALL_TASKS", "Task", (req) => `Fetched all tasks`));
+router.get(
+  "/:id",
+);
 router.get(
   "/:id",
   authenticate,
