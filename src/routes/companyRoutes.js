@@ -14,3 +14,4 @@ router.put("/:id", authenticate, authorize(["ADMIN"]), validate(updateCompanySch
 router.delete("/:id", authenticate, authorize(["ADMIN"]), logActivity("DELETE_COMPANY", "Company", (req) => `Deleted company: ${req.params.id}`), deleteCompany);
 
 export default router;
+

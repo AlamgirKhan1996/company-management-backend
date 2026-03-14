@@ -44,7 +44,8 @@ export const getTasksController = async (req, res) => {
       await activityService.logActivity({
       action: "GET_ALL_TASKS",
       entity: "Task",
-      userId: req.user,
+      userId: req.user?.id,
+      companyId,
       details: JSON.stringify({
         taskCount: tasks.length
       })
