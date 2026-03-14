@@ -7,6 +7,7 @@ import morgan from "morgan";
 import { swaggerSpec } from "./config/swagger.js";
 import swaggerUi from "swagger-ui-express";
 import userRoutes from "./routes/userRoutes.js";
+import companyRoutes from "./routes/companyRoutes.js";
 import departmentRoutes from "./routes/departmentRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -71,6 +72,7 @@ app.use("/api/auth", authRoutes);
 
 // API Routes
 app.use("/api/users", userRoutes);
+app.use("/api/companies", companyRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/employees", employeeRoutes);
