@@ -62,9 +62,7 @@ router.post(
   createTaskController
 );
 router.get("/", authenticate, getTasksController,
-logActivity("GET_ALL_TASKS", "Task", (req) => `Fetched all tasks`));
-router.get(
-  "/:id",
+  
 );
 router.get(
   "/:id",
