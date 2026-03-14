@@ -33,9 +33,10 @@ export const createTask = async (data, companyId) => {
 export const getAllTasks = async (projectId, companyId) => {
   const where = projectId ? { projectId, companyId } : { companyId };
   return await prisma.task.findMany({
-    where: {companyId: req.user.companyId},
-    orderBy: {createdAt: "desc"},
-    });
+    where,
+    orderBy: { createdAt: "desc" },
+    include: { project: true, employee: true },
+  });
 };
 
 
@@ -46,9 +47,9 @@ export const getTaskById = async (id, companyId) => {
   });
 };
 
-export const updateTask = async (id, data) => {
+export const updateTask = async (id, companyId, data) => {
   return await prisma.task.update({
-    where: { id },
+    where: { id, companyId },
     data,
     include: { project: true, employee: true },
   });
