@@ -13,7 +13,6 @@ export const createDepartment = async (req, res, next) => {
     const department = await departmentService.createDepartment(
       name,
       createdById,
-      companyId: req.companyId || req.user.companyId
     );
     logger.info(`✅ Department created successfully: ${department.name} ID: ${department.id} by user ${createdById}`);
     await Cache.del(CacheKeys.departments.all);
