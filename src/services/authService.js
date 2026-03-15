@@ -1,6 +1,7 @@
 import prisma from "../utils/prismaClient.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { id } from "zod/locales";
 
 export const registerUserService = async (name, email, password, role) => {
   // Check if user already exists
@@ -74,8 +75,12 @@ export const loginUserService = async ({
     { expiresIn: "7d" }
   );
 
-  return { token };
+  res.setHeader("Set-Cookie", `token=${token};  Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}`);
+  res.status(200).json({ id: user.id, email: user.email, role: user.role, companyId: user.companyId });
+
+  
 };
+
 
 export const registerCompanyService = async ({
   companyName,
