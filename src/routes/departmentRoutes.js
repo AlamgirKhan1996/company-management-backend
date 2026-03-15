@@ -45,9 +45,9 @@ const router = express.Router();
  *         description: Department created successfully
  */
 
-router.post("/", authenticate, authorize(["ADMIN"]), validate(createDepartmentSchema),logActivity("CREATE_DEPARTMENT", "Department", (req) => `Created department: ${req.body.name}`), createDepartment);
+router.post("/", authenticate, authorize(["ADMIN", "SUPER_ADMIN"]), validate(createDepartmentSchema),logActivity("CREATE_DEPARTMENT", "Department", (req) => `Created department: ${req.body.name}`), createDepartment);
 router.get("/", authenticate,logActivity("GET_ALL_DEPARTMENTS", "Department"), getDepartments);
-router.put("/:id", authenticate, authorize (["ADMIN"]), logActivity("UPDATE_DEPARTMENT", "Department", (req) => `Updated department: ${req.body.name}`), updateDepartment);
-router.delete("/:id", authenticate, authorize(["ADMIN"]), logActivity("DELETE_DEPARTMENT", "Department", (req) => `Deleted department: ${req.params.id}`), deleteDepartment);
+router.put("/:id", authenticate, authorize (["ADMIN", "SUPER_ADMIN"]), logActivity("UPDATE_DEPARTMENT", "Department", (req) => `Updated department: ${req.body.name}`), updateDepartment);
+router.delete("/:id", authenticate, authorize(["ADMIN", "SUPER_ADMIN"]), logActivity("DELETE_DEPARTMENT", "Department", (req) => `Deleted department: ${req.params.id}`), deleteDepartment);
 
 export default router;
