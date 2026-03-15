@@ -8,12 +8,12 @@ export const createDepartment = async (req, res, next) => {
   try {
     const { name } = req.body;
     const createdById = req.user.id;
-    const companyId = req.companyId || req.user.companyId;
+    const companyId = req.companyId;
     // ✅ call service with TWO arguments, not an object
     const department = await departmentService.createDepartment(
       name,
       createdById,
-      companyId
+      companyId: req.companyId || req.user.companyId
     );
     logger.info(`✅ Department created successfully: ${department.name} ID: ${department.id} by user ${createdById}`);
     await Cache.del(CacheKeys.departments.all);

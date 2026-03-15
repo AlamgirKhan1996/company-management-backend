@@ -1,4 +1,3 @@
-import { id } from "zod/locales";
 import prisma from "../utils/prismaClient.js";
 
 // Get all departments
@@ -21,9 +20,8 @@ export const createDepartment = async (name, createdById, companyId) => {
   return await prisma.department.create({
     data: {
       name,
-      createdBy: { connect: { id: createdById } },
-      company: { connect: { id: companyId } },
-      companyId,
+      createdById,
+      companyId
     },
     include: {
       createdBy: {
