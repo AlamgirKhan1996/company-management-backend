@@ -1,4 +1,5 @@
 import prisma from "../utils/prismaClient.js";
+
 export const createTask = async (data, companyId) => {
   const { title, description, status, dueDate, projectId, assignedToId } = data;
 
@@ -24,7 +25,6 @@ export const createTask = async (data, companyId) => {
       project: { connect: { id: projectId } },
       employee: { connect: { id: assignedToId } },
       company: { connect: { id: companyId } },
-      companyId,
     },
     include: { project: true, employee: true },
   });
@@ -39,7 +39,6 @@ export const getAllTasks = async (projectId, companyId) => {
   });
 };
 
-
 export const getTaskById = async (id, companyId) => {
   return await prisma.task.findFirst({
     where: { id, companyId },
@@ -47,16 +46,18 @@ export const getTaskById = async (id, companyId) => {
   });
 };
 
-export const updateTask = async (id, companyId, data) => {
+// BUG FIXED: controller called updateTask(id, { ...body, companyId })
+// but service expected updateTask(id, companyId, data) — arg order was swapped.
+// Now signature matches the controller: updateTask(id, data) where data includes companyId.
+export const updateTask = async (id, data) => {
+  const { companyId, ...rest } = data;
   return await prisma.task.update({
-    where: { id, companyId },
-    data,
+    where: { id },
+    data: { ...rest },
     include: { project: true, employee: true },
   });
 };
 
 export const deleteTask = async (id, companyId) => {
-  return await prisma.task.deleteMany({
-    where: { id, companyId },
-  });
+  return await prisma.task.deleteMany({ where: { id, companyId } });
 };

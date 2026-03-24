@@ -1,27 +1,50 @@
 import prisma from "../utils/prismaClient.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { id } from "zod/locales";
 
+// ─── Register a single user (used by /api/auth/register) ───────────────────
+// NOTE: In multi-tenant mode email is NOT globally unique.
+// This route is kept for dev/seed only. Production should use registerCompanyService.
 export const registerUserService = async (name, email, password, role) => {
-  // Check if user already exists
-  // NOTE: In multi-tenant mode, email is not globally unique.
+  // For multi-tenant we need a companyId, but this legacy endpoint has none.
+  // Find the first company that already has a user with this email (prevent dups)
+  // or just block globally duplicated emails as before.
   const existingUser = await prisma.user.findFirst({ where: { email } });
-  if (existingUser) {
-    throw new Error("User already exists");
-  }
+  if (existingUser) throw new Error("User already exists");
 
-  // Hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Create user
+  // We must attach the user to SOME company.
+  // Find or create a "default" company so the NOT NULL constraint is satisfied.
+  let company = await prisma.company.findFirst({
+    where: { email: "default@company.local" },
+  });
+
+  if (!company) {
+    company = await prisma.company.create({
+      data: {
+        name: "Default Company",
+        email: "default@company.local",
+      },
+    });
+  }
+
   const user = await prisma.user.create({
-    data: { name, email, password: hashedPassword, role },
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+      role: role || "EMPLOYEE",
+      company: { connect: { id: company.id } },
+    },
   });
 
   return user;
 };
 
+// ─── Login ──────────────────────────────────────────────────────────────────
+// BUG FIXED: original code referenced `res` inside a service function.
+// Services must NEVER touch req/res — they just return data.
 export const loginUserService = async ({
   email,
   password,
@@ -30,6 +53,7 @@ export const loginUserService = async ({
 }) => {
   let resolvedCompanyId = companyId;
 
+  // Resolve company by email if companyId not provided
   if (!resolvedCompanyId && companyEmail) {
     const company = await prisma.company.findUnique({
       where: { email: companyEmail },
@@ -40,20 +64,31 @@ export const loginUserService = async ({
   }
 
   let user = null;
+
   if (resolvedCompanyId) {
     user = await prisma.user.findFirst({
       where: { email, companyId: resolvedCompanyId },
     });
   } else {
+    // No company hint — try to find a unique match
     const matches = await prisma.user.findMany({
       where: { email },
-      select: { id: true, email: true, password: true, role: true, companyId: true },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        role: true,
+        companyId: true,
+        name: true,
+      },
       take: 2,
     });
 
     if (matches.length === 0) throw new Error("User not found");
     if (matches.length > 1) {
-      throw new Error("Multiple companies found for this email. Please provide companyEmail or companyId.");
+      throw new Error(
+        "Multiple companies found for this email. Please provide companyEmail or companyId."
+      );
     }
     user = matches[0];
   }
@@ -75,13 +110,20 @@ export const loginUserService = async ({
     { expiresIn: "7d" }
   );
 
-  res.setHeader("Set-Cookie", `token=${token};  Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}`);
-  res.status(200).json({ id: user.id, email: user.email, role: user.role, companyId: user.companyId });
-
-  
+  // Return token and safe user data — the controller sets the cookie/response
+  return {
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyId: user.companyId,
+    },
+  };
 };
 
-
+// ─── Register Company + Super Admin ─────────────────────────────────────────
 export const registerCompanyService = async ({
   companyName,
   companyEmail,
@@ -95,28 +137,16 @@ export const registerCompanyService = async ({
     const existingCompany = await tx.company.findUnique({
       where: { email: companyEmail },
     });
-    if (existingCompany) {
+    if (existingCompany)
       throw new Error("Company already exists with this email");
-    }
-
-    const existingAdmin = await tx.user.findFirst({
-      where: { email: adminEmail },
-    });
-    if (existingAdmin) {
-      throw new Error("User already exists with this email");
-    }
-
-    const company = await tx.company.create({
-      data: {
-        name: companyName,
-        email: companyEmail,
-        phone,
-        address,
-      },
-    });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const company = await tx.company.create({
+      data: { name: companyName, email: companyEmail, phone, address },
+    });
+
+    // Check email uniqueness within the new company (it's a new company so always fine)
     const user = await tx.user.create({
       data: {
         name: adminName,
@@ -138,6 +168,7 @@ export const registerCompanyService = async ({
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
+
     return { company, user, token };
   });
 };
