@@ -56,7 +56,7 @@ const router = express.Router();
 router.post(
   "/",
   authenticate,
-  authorize(["ADMIN", "MANAGER"]),
+  authorize(["ADMIN","SUPERADMIN", "MANAGER"]),
   validate(createProjectSchema),
   logActivity("CREATE_PROJECT", "Project", (req) => `Created project: ${req.body.name}`),
   createProject, // ✅ controller first
@@ -64,7 +64,7 @@ router.post(
 
 // Other routes
 router.get("/", authenticate, getProjects);
-router.put("/:id", authenticate, authorize(["ADMIN", "MANAGER"]), updateProject);
-router.delete("/:id", authenticate, authorize(["ADMIN", "MANAGER"]), deleteProject);
+router.put("/:id", authenticate, authorize(["ADMIN","SUPERADMIN", "MANAGER"]), updateProject);
+router.delete("/:id", authenticate, authorize(["ADMIN","SUPERADMIN", "MANAGER"]), deleteProject);
 
 export default router;
