@@ -31,11 +31,10 @@ export const createProject = async (req, res, next) => {
       companyId,
     });
     logger.info(`✅ Project created successfully: ${project.name} ID: ${project.id} by user${userId} department ${departmentIds}`);
-    await Cache.del(CacheKeys.projects.all);
+    await Cache.del(CacheKeys.projects.all + ":" + companyId);
     res.status(201).json({ message: "Project created successfully", project });
   } catch (err) {
     logger.error(`error creating project${err.message}`)
-    await Cache.del(CacheKeys.projects.all);
     next(err);
   }
 };
