@@ -39,7 +39,6 @@ export const createProject = async ({
       endDate: endDate ? new Date(endDate) : null,
       status,
       company: { connect: { id: companyId } },
-      companyId,
       departments: {
         connect: departmentIds.length
           ? departmentIds.map((id) => ({ id: String(id) }))
