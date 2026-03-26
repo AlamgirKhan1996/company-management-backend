@@ -20,7 +20,7 @@ export const createDepartment = async (req, res, next) => {
     logger.info(
       `✅ Department created: ${department.name} ID: ${department.id} by user ${createdById}`
     );
-    await Cache.del(CacheKeys.departments.all);
+    await Cache.del(CacheKeys.departments.all + ":" + companyId);
     res.status(201).json(department);
   } catch (err) {
     logger.error(`❌ Error creating department: ${err.message}`);
