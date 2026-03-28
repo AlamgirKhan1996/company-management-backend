@@ -17,6 +17,7 @@ import taskRoutes from "./routes/taskRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js"; // Import file routes
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 import logger from "./utils/logger.js";
 import healthRoutes from "./routes/healthRoutes.js";
 
@@ -79,6 +80,7 @@ app.use("/api/departments", departmentRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/ai-employees", aiEmployeeRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/activity-logs", activityRoutes);
 app.use("/api/files", fileRoutes); // Serve static files from uploads directory
