@@ -119,6 +119,11 @@ model Task {
   user       User?     @relation(fields: [userId], references: [id])
   userId     String?
 
+  aiEmployee   AIEmployee? @relation(fields: [aiEmployeeId], references: [id])
+  aiEmployeeId String?
+  aiResult     Json?
+  aiExecutedAt DateTime?
+
   @@index([status])
   @@index([dueDate])
   @@index([companyId])
@@ -201,6 +206,8 @@ model AIEmployee {
   tasks       AITask[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  assignedTasks Task[]
 }
 
 model AITask {
