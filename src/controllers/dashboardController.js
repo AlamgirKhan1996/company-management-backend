@@ -67,14 +67,13 @@ export const getDashboardStats = async (req, res) => {
       // Recent employees (last 5)
       prisma.employee.findMany({
         where: { companyId },
-        orderBy: { createdAt: "desc" },
+        orderBy: { id: "desc" },
         take: 5,
         select: {
           id: true,
           name: true,
           role: true,
           department: { select: { name: true } },
-          createdAt: true,
         },
       }),
     ]);
