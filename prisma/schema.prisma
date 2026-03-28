@@ -23,6 +23,7 @@ model Company {
   tasks        Task[]
   activityLogs ActivityLog[]
   files        File[]
+  aiemployees  AIEmployee[]
 }
 
 model User {
@@ -184,6 +185,46 @@ model File {
   companyId String
 
   @@index([companyId])
+}
+
+// schema.prisma — add these models
+
+model AIEmployee {
+  id          String   @id @default(uuid())
+  name        String
+  role        String // "HR Manager", "Sales Executive", etc.
+  department  String
+  permissions String[] // ["READ_EMPLOYEES", "WRITE_REPORTS", etc.]
+  isActive    Boolean  @default(true)
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  tasks       AITask[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AITask {
+  id           String       @id @default(uuid())
+  title        String
+  description  String
+  status       AITaskStatus @default(PENDING)
+  priority     String       @default("MEDIUM")
+  aiEmployeeId String
+  aiEmployee   AIEmployee   @relation(fields: [aiEmployeeId], references: [id])
+  assignedById String // user who assigned it
+  companyId    String
+  result       Json? // structured AI output
+  executedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+enum AITaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  NEEDS_CLARIFICATION
+  FAILED
 }
 
 enum UserRole {

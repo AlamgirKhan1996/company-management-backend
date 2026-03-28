@@ -12,12 +12,14 @@ import departmentRoutes from "./routes/departmentRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
+import aiEmployeeRoutes from "./routes/aiEmployeeRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js"; // Import file routes
 import logger from "./utils/logger.js";
 import healthRoutes from "./routes/healthRoutes.js";
+
 
 dotenv.config();
 const app = express();
@@ -76,6 +78,7 @@ app.use("/api/companies", companyRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/employees", employeeRoutes);
+app.use("/api/ai-employees", aiEmployeeRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/activity-logs", activityRoutes);
 app.use("/api/files", fileRoutes); // Serve static files from uploads directory
