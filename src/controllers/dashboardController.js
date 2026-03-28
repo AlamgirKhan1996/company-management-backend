@@ -42,9 +42,7 @@ export const getDashboardStats = async (req, res) => {
         select: {
           id: true,
           status: true,
-          priority: true,
           dueDate: true,
-          aiEmployeeId: true,
           createdAt: true,
           project: { select: { name: true } },
         },
@@ -83,16 +81,14 @@ export const getDashboardStats = async (req, res) => {
     const tasksTodo = tasksAll.filter((t) => t.status === "TODO").length;
     const tasksInProgress = tasksAll.filter((t) => t.status === "IN_PROGRESS").length;
     const tasksDone = tasksAll.filter((t) => t.status === "DONE").length;
-    const tasksAIExecuted = tasksAll.filter((t) => t.aiEmployeeId !== null).length;
+    const tasksAIExecuted = 0; // Placeholder - implement when AI execution tracking exists
 
     const tasksOverdue = tasksAll.filter((t) => {
       if (!t.dueDate || t.status === "DONE") return false;
       return new Date(t.dueDate) < now;
     }).length;
 
-    const tasksHighPriority = tasksAll.filter(
-      (t) => t.priority === "HIGH" && t.status !== "DONE"
-    ).length;
+    const tasksHighPriority = 0; // Placeholder - implement when priority field exists
 
     // ─── Task trend (last 7 days) ─────────────────────────────────────────
     const taskTrend = [];
