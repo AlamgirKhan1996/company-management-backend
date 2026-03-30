@@ -190,7 +190,6 @@ export const acceptInvite = async (req, res) => {
         name,
         password: hashedPassword,
         role: invite.role,
-        status: "ACTIVE",
         companyId: invite.companyId,
       },
     });
