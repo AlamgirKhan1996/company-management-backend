@@ -1,21 +1,13 @@
 // ─── src/controllers/inviteController.js ─────────────────────────────────────
 
 import prisma from "../utils/prismaClient.js";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import logger from "../utils/logger.js";
 
 // ─── Mailer setup ─────────────────────────────────────────────────────────────
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "465"),
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ─── Send invite email ────────────────────────────────────────────────────────
 async function sendInviteEmail({ to, inviterName, companyName, role, inviteUrl }) {
@@ -28,44 +20,30 @@ async function sendInviteEmail({ to, inviterName, companyName, role, inviteUrl }
   const html = `
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>You're invited to ${companyName}</title>
-</head>
 <body style="margin:0;padding:0;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <div style="max-width:520px;margin:40px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-    
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:40px 40px 32px;">
-      <div style="width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-        <span style="font-size:24px;">🤖</span>
-      </div>
-      <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.5px;">
-        You're invited to join<br>${companyName}
+    <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:40px;">
+      <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;">
+        You're invited to join ${companyName}
       </h1>
       <p style="margin:8px 0 0;color:rgba(255,255,255,0.75);font-size:14px;">
         ${inviterName} has invited you as <strong style="color:#c4b5fd;">${roleLabel}</strong>
       </p>
     </div>
 
-    <!-- Body -->
     <div style="padding:32px 40px;">
-      <p style="margin:0 0 24px;color:#374151;font-size:15px;line-height:1.6;">
-        You've been invited to the <strong>${companyName}</strong> workspace on our Company Management System. 
+      <p style="color:#374151;font-size:15px;line-height:1.6;">
         Click the button below to set up your account and get started.
       </p>
 
-      <!-- CTA Button -->
       <div style="text-align:center;margin:32px 0;">
-        <a href="${inviteUrl}" 
-           style="display:inline-block;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#ffffff;text-decoration:none;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:600;letter-spacing:0.2px;">
+        <a href="${inviteUrl}"
+           style="display:inline-block;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#ffffff;text-decoration:none;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:600;">
           Accept Invitation →
         </a>
       </div>
 
-      <!-- Info box -->
-      <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:16px 20px;margin:24px 0;">
+      <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:16px 20px;">
         <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;">
           <strong style="color:#374151;">Role:</strong> ${roleLabel}<br>
           <strong style="color:#374151;">Company:</strong> ${companyName}<br>
@@ -73,17 +51,16 @@ async function sendInviteEmail({ to, inviterName, companyName, role, inviteUrl }
         </p>
       </div>
 
-      <p style="margin:24px 0 0;color:#9ca3af;font-size:12px;line-height:1.6;">
-        This invite link expires in <strong>48 hours</strong>. 
-        If you didn't expect this invitation, you can safely ignore this email.
+      <p style="margin:24px 0 0;color:#9ca3af;font-size:12px;">
+        This invite link expires in <strong>48 hours</strong>.
+        If you didn't expect this, ignore this email.
       </p>
     </div>
 
-    <!-- Footer -->
     <div style="padding:20px 40px;border-top:1px solid #f3f4f6;background:#fafafa;">
       <p style="margin:0;color:#9ca3af;font-size:12px;">
-        Company Management System · Secure invite link<br>
-        <span style="color:#d1d5db;">If button doesn't work, copy: ${inviteUrl}</span>
+        If button doesn't work, copy this link:<br>
+        <span style="color:#6b7280;">${inviteUrl}</span>
       </p>
     </div>
   </div>
@@ -91,8 +68,8 @@ async function sendInviteEmail({ to, inviterName, companyName, role, inviteUrl }
 </html>
   `.trim();
 
-  await transporter.sendMail({
-    from: `"${companyName} via CMS" <${process.env.SMTP_USER}>`,
+  await resend.emails.send({
+    from: process.env.FROM_EMAIL || "onboarding@resend.dev",
     to,
     subject: `You're invited to join ${companyName} on CMS`,
     html,
