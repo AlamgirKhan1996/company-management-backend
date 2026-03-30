@@ -2,9 +2,11 @@ import express from "express";
 import { registerUser, loginUser, registerCompany } from "../controllers/authController.js";
 import { validate } from "../middleware/validateRequest.js";
 import { registerSchema, loginSchema, registerCompanySchema } from "../validators/authValidator.js";
+import { inviteSchema } from "../validators/authValidator.js";
 import { logActivity } from "../middleware/activityLogger.js";
-import { authenticate } from "../middleware/authMiddleware.js";
+import { authenticate, authorize } from "../middleware/authMiddleware.js";
 import { getMe } from "../controllers/authController.js";
+import { sendInvite } from "../controllers/inviteController.js";
 const router = express.Router();
 
 /**
@@ -68,6 +70,7 @@ router.post(
   registerCompany
 );
 
+router.post("/invite", authenticate, authorize(["SUPER_ADMIN", "ADMIN"]), validate(inviteSchema), sendInvite);
 router.get("/me", authenticate, logActivity("GET_ME", "User", (req) => `Fetched profile for user: ${req.user.email}`), getMe);
 
 
