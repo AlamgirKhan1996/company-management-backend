@@ -3,6 +3,7 @@
 import prisma from "../utils/prismaClient.js";
 import logger from "../utils/logger.js";
 import { Cache } from "../utils/cache.js";
+import * as activityService from "../services/activityService.js";
 
 export const getActivityLogs = async (req, res) => {
   try {
@@ -57,6 +58,3 @@ export const getActivityLogs = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-// ─── src/routes/activityRoutes.js ────────────────────────────────────────────
-// (exported as string constant below for copy-paste convenience)
