@@ -781,7 +781,90 @@ export const getAIReport = async (companyId, { startDate, endDate } = {}) => {
   };
 };
 
-// ─── 8. CSV Export Helpers ────────────────────────────────────────────────────
+// ─── 8. Task Trends (sub-route) ───────────────────────────────────────────────
+
+export const getTasksTrends = async (companyId, { startDate, endDate, projectId } = {}) => {
+  const { start, end } = getDateRange(startDate, endDate);
+  const where = { companyId, createdAt: { gte: start, lte: end } };
+  if (projectId) where.projectId = projectId;
+
+  const tasks = await prisma.task.findMany({
+    where,
+    select: { id: true, status: true, dueDate: true, createdAt: true },
+  });
+
+  const { buckets: trend, granularity } = buildDailyTrend(
+    tasks,
+    (t) => new Date(t.createdAt),
+    start,
+    end,
+    {
+      completed: (items) => items.filter((t) => t.status === "DONE").length,
+      overdue: (items) => items.filter((t) => isOverdue(t.dueDate, t.status)).length,
+    }
+  );
+
+  return { trend: { data: trend, granularity }, period: { start, end } };
+};
+
+// ─── 9. Project Health (sub-route) ────────────────────────────────────────────
+
+export const getProjectsHealth = async (companyId, { startDate, endDate } = {}) => {
+  const { start, end } = getDateRange(startDate, endDate);
+  const now = new Date();
+
+  const projects = await prisma.project.findMany({
+    where: { companyId },
+    include: {
+      departments: { select: { id: true, name: true } },
+      tasks: { select: { id: true, status: true, dueDate: true } },
+      _count: { select: { tasks: true } },
+    },
+  });
+
+  const enriched = projects.map((p) => {
+    const tasks = p.tasks;
+    const total = tasks.length;
+    const completed = tasks.filter((t) => t.status === "DONE").length;
+    const rate = completionRate(completed, total);
+
+    const projectIsOverdue = p.endDate && new Date(p.endDate) < now && p.status !== "COMPLETED";
+
+    let health = "ON_TRACK";
+    if (projectIsOverdue) {
+      health = "OVERDUE";
+    } else if (p.endDate && p.startDate && p.status !== "COMPLETED") {
+      const totalDuration = new Date(p.endDate) - new Date(p.startDate);
+      const elapsed = now - new Date(p.startDate);
+      const expectedProgress =
+        totalDuration > 0 ? Math.min(100, Math.round((elapsed / totalDuration) * 100)) : 0;
+      if (rate < expectedProgress - 25) health = "AT_RISK";
+    }
+
+    return {
+      id: p.id,
+      name: p.name,
+      status: p.status,
+      health,
+      startDate: p.startDate,
+      endDate: p.endDate,
+      departments: p.departments,
+      completionRate: rate,
+      totalTasks: total,
+      completedTasks: completed,
+    };
+  });
+
+  const byHealth = {
+    ON_TRACK: enriched.filter((p) => p.health === "ON_TRACK").length,
+    AT_RISK: enriched.filter((p) => p.health === "AT_RISK").length,
+    OVERDUE: enriched.filter((p) => p.health === "OVERDUE").length,
+  };
+
+  return { summary: { total: projects.length, byHealth }, projects: enriched };
+};
+
+// ─── 10. CSV Export Helpers ───────────────────────────────────────────────────
 
 const buildCSV = (headers, rows) => {
   const escape = (val) => {

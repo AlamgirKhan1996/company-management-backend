@@ -73,6 +73,13 @@ router.get(
  *         description: Project breakdown with health scores and timelines
  */
 router.get(
+  "/projects/health",
+  authenticate,
+  authorize(REPORT_ROLES),
+  reportsController.getProjectsHealth
+);
+
+router.get(
   "/projects",
   authenticate,
   authorize(REPORT_ROLES),
@@ -105,6 +112,13 @@ router.get(
  *       200:
  *         description: Task summary, trend data, per-project and per-assignee breakdown
  */
+router.get(
+  "/tasks/trends",
+  authenticate,
+  authorize(REPORT_ROLES),
+  reportsController.getTasksTrends
+);
+
 router.get(
   "/tasks",
   authenticate,

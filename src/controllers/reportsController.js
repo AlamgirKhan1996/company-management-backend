@@ -169,7 +169,45 @@ export const getAIReport = async (req, res) => {
   }
 };
 
-// ─── 8. CSV Exports ───────────────────────────────────────────────────────────
+// ─── 8. Task Trends ───────────────────────────────────────────────────────────
+
+export const getTasksTrends = async (req, res) => {
+  try {
+    const companyId = getCompanyId(req);
+    const filters = extractFilters(req.query);
+    const key = cacheKey("reports:tasks:trends", companyId, filters);
+    await sendReport(
+      res,
+      key,
+      () => reportsService.getTasksTrends(companyId, filters),
+      `Tasks trends for company ${companyId}`
+    );
+  } catch (err) {
+    logger.error(`❌ Tasks trends error: ${err.message}`);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+// ─── 9. Projects Health ───────────────────────────────────────────────────────
+
+export const getProjectsHealth = async (req, res) => {
+  try {
+    const companyId = getCompanyId(req);
+    const filters = extractFilters(req.query);
+    const key = cacheKey("reports:projects:health", companyId, filters);
+    await sendReport(
+      res,
+      key,
+      () => reportsService.getProjectsHealth(companyId, filters),
+      `Projects health for company ${companyId}`
+    );
+  } catch (err) {
+    logger.error(`❌ Projects health error: ${err.message}`);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+// ─── 10. CSV Exports ──────────────────────────────────────────────────────────
 
 export const exportTasks = async (req, res) => {
   try {
