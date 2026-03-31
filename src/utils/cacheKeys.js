@@ -31,5 +31,15 @@ export const CacheKeys = {
   files: {
     all: "files:all",
     one: (id) => `files:${id}`,
-  }
+  },
+
+  reports: {
+    overview:    (companyId, filters) => `reports:overview:${companyId}:${JSON.stringify(filters)}`,
+    projects:    (companyId, filters) => `reports:projects:${companyId}:${JSON.stringify(filters)}`,
+    tasks:       (companyId, filters) => `reports:tasks:${companyId}:${JSON.stringify(filters)}`,
+    employees:   (companyId, filters) => `reports:employees:${companyId}:${JSON.stringify(filters)}`,
+    departments: (companyId, filters) => `reports:departments:${companyId}:${JSON.stringify(filters)}`,
+    activity:    (companyId, filters) => `reports:activity:${companyId}:${JSON.stringify(filters)}`,
+    ai:          (companyId, filters) => `reports:ai:${companyId}:${JSON.stringify(filters)}`,
+  },
 };

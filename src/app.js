@@ -22,6 +22,7 @@ import fileRoutes from "./routes/fileRoutes.js"; // Import file routes
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import logger from "./utils/logger.js";
 import healthRoutes from "./routes/healthRoutes.js";
+import reportsRoutes from "./routes/reportsRoutes.js";
 
 
 dotenv.config();
@@ -94,7 +95,8 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/activities", activityRoutes);
 app.use("/api/invite", inviteRoutes);
 app.use("/api/notifications", notificationRoutes);
-app.use("/api/files", fileRoutes); // Serve static files from uploads directory
+app.use("/api/files", fileRoutes);
+app.use("/api/reports", reportsRoutes);
 app.use(errorHandler);
 
 export default app;
