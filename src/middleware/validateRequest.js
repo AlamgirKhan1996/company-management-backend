@@ -17,9 +17,9 @@ export const validate = (schema) => (req, res, next) => {
       });
     }
     // Handle unexpected errors
-    console.error("Validation middleware error:", err);
+    console.error("Validation middleware error:", error);
     return res
       .status(500)
-      .json({ success: false, message: "Internal server error", error: err.message });
+      .json({ success: false, message: "Internal server error", error: error.message });
   }
 }

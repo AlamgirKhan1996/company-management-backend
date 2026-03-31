@@ -10,8 +10,10 @@ export const getActivityLogs = async (req, res) => {
     const companyId = req.companyId || req.user.companyId;
     const { page = 1, limit = 50, entity, action, userId } = req.query;
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const take = parseInt(limit);
+    const parsedPage = Math.max(1, parseInt(page) || 1);
+    const parsedLimit = Math.min(100, Math.max(1, parseInt(limit) || 50));
+    const skip = (parsedPage - 1) * parsedLimit;
+    const take = parsedLimit;
 
     // Build dynamic where clause
     const where = { companyId };
@@ -19,7 +21,7 @@ export const getActivityLogs = async (req, res) => {
     if (action) where.action = action;
     if (userId) where.userId = userId;
 
-    const cacheKey = `activity:${companyId}:${page}:${limit}:${entity || ""}:${action || ""}`;
+    const cacheKey = `activity:${companyId}:${parsedPage}:${parsedLimit}:${entity || ""}:${action || ""}`;
     const cached = await Cache.get(cacheKey);
     if (cached) {
       return res.status(200).json(JSON.parse(cached));
@@ -44,7 +46,7 @@ export const getActivityLogs = async (req, res) => {
       logs,
       pagination: {
         total,
-        page: parseInt(page),
+        page: parsedPage,
         limit: take,
         pages: Math.ceil(total / take),
       },

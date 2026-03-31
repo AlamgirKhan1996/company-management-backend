@@ -15,10 +15,30 @@ const storage = multer.diskStorage({
   },
 });
 
-// File filter (optional)
+const ALLOWED_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "text/plain",
+  "text/csv",
+];
+
 const fileFilter = (req, file, cb) => {
-  // Accept all files, or customize by mime-type
-  cb(null, true);
+  if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error(`File type not allowed: ${file.mimetype}`), false);
+  }
 };
 
-export const upload = multer({ storage, fileFilter });
+export const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB max
+});

@@ -31,18 +31,25 @@ const app = express();
 app.use(helmet({ contentSecurityPolicy: false })); // Sets secure HTTP headers
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-  })
-);
-
 const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-  "company-management-frontend-zeta.vercel.app", // when deployed
+  "https://company-management-frontend-zeta.vercel.app",
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
 ];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS policy: origin ${origin} not allowed`));
+      }
+    },
+    credentials: true,
+  })
+);
 
 app.use("/api/health", healthRoutes);
 
