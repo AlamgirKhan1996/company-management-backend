@@ -92,7 +92,7 @@ app.use("/api/employees", employeeRoutes);
 app.use("/api/ai-employees", aiEmployeeRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/tasks", taskRoutes);
-app.use("/api/activities", activityRoutes);
+app.use("/api/activity", activityRoutes);
 app.use("/api/invite", inviteRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/files", fileRoutes);
