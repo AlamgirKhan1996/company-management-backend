@@ -120,6 +120,7 @@ model Task {
   employeeId String?
   user       User?     @relation(fields: [userId], references: [id])
   userId     String?
+  priority   String    @default("MEDIUM")
 
   aiEmployee   AIEmployee? @relation(fields: [aiEmployeeId], references: [id])
   aiEmployeeId String?
