@@ -1,135 +1,157 @@
-import * as userService from "../services/userService.js";
-import * as activityService from "../services/activityService.js";
+// ─── src/controllers/userController.js ──────────────────────────────────────
+// CRITICAL FIX: All queries now filter by companyId
+// Previously returned ALL users from ALL companies — major security vulnerability
+
+import prisma from "../utils/prismaClient.js";
 import logger from "../utils/logger.js";
 import { Cache } from "../utils/cache.js";
-import { CacheKeys } from "../utils/cacheKeys.js";
 
-// Create User
-export const createUser = async (req, res, next) => {
+// ─── GET all users for THIS company only ─────────────────────────────────────
+export const getUsers = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
-    const user = await userService.createUser({
-      name,
-      email,
-      password,
-      role
+    // ✅ Always scope to the authenticated user's company
+    const companyId = req.companyId || req.user.companyId;
+
+    if (!companyId) {
+      return res.status(400).json({ error: "Company context required" });
+    }
+
+    const cacheKey = `users:${companyId}`;
+    const cached = await Cache.get(cacheKey);
+    if (cached) {
+      logger.info(`📦 Users fetched from cache for company ${companyId}`);
+      return res.status(200).json(JSON.parse(cached));
+    }
+
+    const users = await prisma.user.findMany({
+      where: {
+        companyId, // ✅ THE FIX — scope to company
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        // ✅ Never return password hash
+      },
+      orderBy: { createdAt: "desc" },
     });
-    // await activityService.logActivity({
-    //   action: "USER_CREATED",
-    //   entity: "User",
-    //   entityId: user.id,
-    //   userId: req.user.id,
-    //   details: JSON.stringify({
-    //     name: user.name,
-    //     email: user.email,
-    //     role: user.role
-    //   })
-    // });
-    logger.info(`✅ User created successfully: ${user.name} ID: ${user.id} by user ${req.user.id}`);
-    await Cache.del(CacheKeys.users.all);
-    res.status(201).json(user);
+
+    await Cache.set(cacheKey, JSON.stringify(users), 60);
+    logger.info(`👥 Users fetched: ${users.length} for company ${companyId}`);
+    res.status(200).json(users);
   } catch (err) {
-    logger.error(`❌ Error creating user: ${err.message}`);
-    await Cache.del(CacheKeys.users.all);
-    next(err);
+    logger.error(`❌ Get users error: ${err.message}`);
+    res.status(500).json({ error: err.message });
   }
 };
 
-// Get All Users
-export const getUsers = async (req, res, next) => {
+// ─── GET single user ──────────────────────────────────────────────────────────
+export const getUserById = async (req, res) => {
   try {
-    const users = await userService.getAllUsers();
-    // await activityService.logActivity({
-    //   action: "GET_ALL_USERS",
-    //   entity: "User",
-    //   userId: req.user.id,
-    //   details: JSON.stringify({
-    //     userCount: users.length
-    //   })
-    // });
-    logger.info(`Get All Users: ${users.map(user => user.name)} ${users.length} IDs: ${users.map(user => user.id)}`);
-    await Cache.del(CacheKeys.users.all);
-    res.json(users);
-  } catch (err) {
-    logger.error(`❌ Error getting all users: ${err.message}`);
-    await Cache.del(CacheKeys.users.all);
-    next(err);
-  }
-};
-export const getUserById = async (req, res, next) => {
-  try {
-    const user = await userService.getUserById(req.params.id);
-    await activityService.logActivity({
-      action: "GET_USER_BY_ID",
-      entity: "User",
-      entityId: req.params.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        userName: user.name,
-        userEmail: user.email,
-        userRole: user.role
-      })
-    });
-    logger.info(`Get User By ID: ${user.name} ID: ${user.id} requested by user ${req.user.id}`);
-    await Cache.del(CacheKeys.users.all);
-    if (!user) return res.status(404).json({ error: "User not found" });
-    res.json(user);
-  } catch (err) {
-    logger.error(`❌ Error getting user by ID: ${err.message}`);
-    await Cache.del(CacheKeys.users.all);
-    next(err);
-  }
-};
-
-export const updateUser = async (req, res, next) => {
-  try {
+    const companyId = req.companyId || req.user.companyId;
     const { id } = req.params;
-    const data = req.body;
 
-    const user = await userService.updateUser(id, data);
-    await activityService.logActivity({
-      action: "USER_UPDATED",
-      entity: "User",
-      entityId: user.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        name: user.name,
-        email: user.email,
-        role: user.role
-      })
+    const user = await prisma.user.findFirst({
+      where: { id, companyId }, // ✅ scope to company
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
     });
-    logger.info(`✅ User updated successfully: ${user.name} ID: ${user.id} by user ${req.user.id}`);
-    await Cache.del(CacheKeys.users.all);
-    res.json({
-      success: true,
-      message: "User updated successfully",
-      user,
-    });
-  } catch (error) {
-    logger.error(`❌ Error updating user: ${error.message}`);
-    await Cache.del(CacheKeys.users.all);
-    next(error);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    logger.error(`❌ Get user by ID error: ${err.message}`);
+    res.status(500).json({ error: err.message });
   }
 };
+
+// ─── UPDATE user role (Admin only) ───────────────────────────────────────────
+export const updateUserRole = async (req, res) => {
+  try {
+    const companyId = req.companyId || req.user.companyId;
+    const { id } = req.params;
+    const { role } = req.body;
+
+    const validRoles = ["ADMIN", "MANAGER", "EMPLOYEE"];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ error: "Invalid role" });
+    }
+
+    // Can't change SUPER_ADMIN role
+    const existing = await prisma.user.findFirst({
+      where: { id, companyId },
+    });
+
+    if (!existing) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (existing.role === "SUPER_ADMIN") {
+      return res.status(403).json({ error: "Cannot modify Super Admin role" });
+    }
+
+    // Can't demote yourself
+    if (existing.id === req.user.id) {
+      return res.status(403).json({ error: "Cannot change your own role" });
+    }
+
+    const updated = await prisma.user.update({
+      where: { id },
+      data: { role },
+      select: { id: true, name: true, email: true, role: true },
+    });
+
+    // Bust cache
+    await Cache.del(`users:${companyId}`);
+
+    logger.info(`✅ User role updated: ${updated.email} → ${role} by ${req.user.id}`);
+    res.status(200).json(updated);
+  } catch (err) {
+    logger.error(`❌ Update user role error: ${err.message}`);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// ─── DELETE user (Admin only) ─────────────────────────────────────────────────
 export const deleteUser = async (req, res) => {
   try {
-    await userService.deleteUser(req.params.id);
-    await activityService.logActivity({
-      action: "USER_DELETED",
-      entity: "User",
-      entityId: req.params.id,
-      userId: req.user.id,
-      details: JSON.stringify({
-        message: "User deleted successfully"
-      })
+    const companyId = req.companyId || req.user.companyId;
+    const { id } = req.params;
+
+    // Can't delete yourself
+    if (id === req.user.id) {
+      return res.status(403).json({ error: "Cannot delete your own account" });
+    }
+
+    const existing = await prisma.user.findFirst({
+      where: { id, companyId },
     });
-    logger.info(`✅ User deleted successfully: ID: ${req.params.id} by user ${req.user.id}`);
-    await Cache.del(CacheKeys.users.all);
-    res.json({ message: "User deleted successfully" });
-  } catch (error) {
-    logger.error(`❌ Error deleting user: ${error.message}`);
-    await Cache.del(CacheKeys.users.all);
-    res.status(500).json({ error: error.message });
+
+    if (!existing) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (existing.role === "SUPER_ADMIN") {
+      return res.status(403).json({ error: "Cannot delete Super Admin" });
+    }
+
+    await prisma.user.delete({ where: { id } });
+    await Cache.del(`users:${companyId}`);
+
+    logger.info(`✅ User deleted: ${existing.email} by ${req.user.id}`);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    logger.error(`❌ Delete user error: ${err.message}`);
+    res.status(500).json({ error: err.message });
   }
 };
-

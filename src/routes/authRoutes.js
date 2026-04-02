@@ -7,6 +7,7 @@ import { logActivity } from "../middleware/activityLogger.js";
 import { authenticate, authorize } from "../middleware/authMiddleware.js";
 import { getMe } from "../controllers/authController.js";
 import { sendInvite } from "../controllers/inviteController.js";
+import { changePassword } from "../controllers/authController.js";
 const router = express.Router();
 
 /**
@@ -69,6 +70,7 @@ router.post(
   ),
   registerCompany
 );
+router.post("/change-password", authenticate, logActivity("CHANGE_PASSWORD", "User", (req) => `Changed password for user: ${req.user.email}`), changePassword);
 
 router.post("/invite", authenticate, authorize(["SUPER_ADMIN", "ADMIN"]), validate(inviteSchema), sendInvite);
 router.get("/me", authenticate, logActivity("GET_ME", "User", (req) => `Fetched profile for user: ${req.user.email}`), getMe);
